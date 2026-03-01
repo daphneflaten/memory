@@ -1,0 +1,427 @@
+/* =======================
+   Base
+======================= */
+html, body {
+  margin: 0;
+  background: rgb(0, 0, 0);
+  min-height: 100vh;
+  font-family: "Reddit Mono", monospace;
+}
+
+/* =======================
+   Background Layers
+======================= */
+#binary {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =======================
+   Folder Layout (Right Side)
+======================= */
+.memory-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;   /* grid itself doesn’t block clicks */
+  z-index: 2;
+}
+
+/* =======================
+   Folder Block (Icon + Label Connected)
+======================= */
+.memory-folder {
+  position: absolute;
+  width: 95px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  color: white;
+  font-size: 0.75rem;
+  cursor: pointer;
+  pointer-events: auto;   /* clickable */
+
+  animation: float 18s ease-in-out infinite alternate;
+}
+
+/* Folder Images */
+.memory-folder img {
+  width: 95px;
+  display: block;
+}
+
+/* Open folder overlays closed one */
+.memory-folder .open {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.memory-folder:hover .open {
+  opacity: 1;
+}
+
+.memory-folder:hover .closed {
+  opacity: 0;
+}
+
+.memory-folder span {
+  opacity: 0.7;
+}
+
+.memory-folder:hover span {
+  opacity: 1;
+}
+
+/* =======================
+   FILE POPUP WINDOW
+======================= */
+
+#popup {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+#popup.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* outer window */
+.popup-window {
+  background: black;
+  border: 1px solid white;
+
+  width: 420px;
+  max-width: 90vw;
+
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* white header */
+.popup-header {
+  height: 32px;
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding-left: 12px;
+  box-sizing: border-box;
+}
+
+/* X button */
+#popup-close {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: black;
+  user-select: none;
+}
+
+#popup-close:hover {
+  opacity: 0.6;
+}
+
+/* content area */
+.popup-body {
+  padding: 30px 40px 40px 40px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 24px;
+}
+
+/* =======================
+   File Unit (Icon + Label)
+======================= */
+
+.file-unit {
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.file-unit:hover {
+  opacity: 0.85;
+}
+
+.file {
+  width: 50px;
+}
+
+.file-label {
+  font-size: 0.6rem;
+  text-align: center;
+  color: white;
+  word-break: break-word;
+}
+
+/* =======================
+   Cursor Particles
+======================= */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fade 800ms linear forwards;
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.5);
+  }
+}
+
+@keyframes float {
+  0%   { transform: translate(0px, 0px); }
+  50%  { transform: translate(20px, -25px); }
+  100% { transform: translate(-15px, 20px); }
+}
+
+#screen-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+
+  pointer-events: none;
+  z-index: 9999;
+
+  opacity: 0.12;
+  mix-blend-mode: screen;
+}
+
+#transition {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 20000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#transition.active {
+  opacity: 1;
+}
+
+/* =======================
+   ERROR MODAL
+======================= */
+
+#error-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30000;
+}
+
+#error-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* OUTER WINDOW */
+.error-box {
+  background: #ff3822;
+  border: 1px solid white;
+  width: 420px;
+  max-width: 90vw;
+  box-sizing: border-box;
+  color: white;
+  position: relative;
+}
+
+/* FULL-WIDTH HEADER */
+.error-header {
+  height: 32px;
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  /* move content to left */
+
+  padding-left: 12px;           /* space from edge */
+  box-sizing: border-box;
+}
+
+/* X button */
+#error-close {
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: black;
+  user-select: none;
+}
+
+#error-close:hover {
+  opacity: 0.6;
+}
+
+/* INNER CONTENT AREA */
+.error-body {
+  padding: 30px 50px 40px 50px;
+  text-align: center;
+}
+
+/* GIF */
+#error-gif {
+  width: 100px;
+  margin: 0 auto 20px auto;
+  display: block;
+}
+
+/* ERROR title */
+.error-box h1 {
+  font-size: 3rem;
+  margin: 0 0 15px 0;
+}
+
+/* Description */
+.error-box p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* OK button */
+#error-ok {
+  margin-top: 30px;
+  padding: 8px 26px;
+  background: none;
+  border: 1px solid white;
+  color: white;
+  font-family: "Reddit Mono", monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+#error-ok:hover {
+  background: white;
+  color: black;
+}
+
+/* background folder container */
+#background-folders {
+  position: fixed;
+  inset: 0;
+  z-index: 1;              /* below clickable folders */
+  pointer-events: none;    /* completely non-interactive */
+}
+
+/* clickable folders above */
+.memory-folder {
+  z-index: 5;
+}
+
+/* background folder style */
+.bg-folder {
+  position: absolute;
+  pointer-events: none;
+
+  filter: blur(5px);
+}
+
+.bg-folder img {
+  display: block;
+}
+
+/* ==========================
+   RANDOM ERROR POPUPS
+========================== */
+
+.random-error {
+  position: fixed;
+  width: 320px;
+  background: rgb(95, 80, 255);
+  border: 1px solid white;
+  color: white;
+  z-index: 40000;
+
+  display: flex;
+  flex-direction: column;
+  font-family: "Reddit Mono", monospace;
+}
+
+/* header bar */
+.random-error-header {
+  background: white;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+/* X button */
+.random-error-close {
+  color: black;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* body */
+.random-error-body {
+  padding: 25px 20px;
+  text-align: center;
+}
+
+.random-error-body h1 {
+  margin: 0 0 10px 0;
+  font-size: 1.6rem;
+}
+
+.random-error-body p {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+/* ok button */
+.random-error-ok {
+  background: none;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font: inherit;
+}
+
+.random-error-ok:hover {
+  color: black;
+  background: white;
+}

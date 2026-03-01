@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>archive</title>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- font -->
+  <link href="https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- landing styles -->
+  <link rel="stylesheet" href="binary.css">
+  <link rel="stylesheet" href="landing.css">
+</head>
+
+<div id="transition"></div>
+<div id="random-errors"></div>
+
+<div id="error-modal">
+  <div class="error-box">
+
+    <div class="error-header">
+      <div id="error-close">× christmas_morning_3rd_grade.mov</div>
+    </div>
+
+    <div class="error-body">
+
+      <img src="cats.gif" id="error-gif" alt="corrupted memory">
+
+      <h1>ERROR</h1>
+      <p>file corrupted cuz you cant remember</p>
+
+      <button id="error-ok">OK</button>
+
+    </div>
+
+  </div>
+</div>
+
+<body>
+
+<img id="screen-overlay" src="screen.jpeg" alt="">
+<div id="binary"></div>
+
+<div id="background-folders"></div>
+
+<!-- memory folders -->
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory1.html","label":"marcia_joe_1955.mp4"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>weddings</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+        {"img":"file.png","page":"memory5.html","label":"christmas_morning_3rd_grade.mov","corrupted":true}     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>holidays</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory6.html","label":"backyard 2009.mp4"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>backyard</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory7.html","label":"sleepover.mov"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>friends</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory8.html","label":"first pet.mp4"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>pets</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory9.html","label":"road trip.mov"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>travel</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory10.html","label":"school play.mp4"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>school</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory11.html","label":"snow day.mov"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>winter</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory12.html","label":"cousins 2008.mp4"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>family</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory13.html","label":"birthday cake.mov"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>celebrations</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory14.html","label":"park 2006.mp4"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>park</span>
+</div>
+
+<div class="memory-folder"
+     data-files='[
+       {"img":"file.png","page":"memory15.html","label":"kitchen.mov"}
+     ]'>
+  <img class="closed" src="folder-closed.png">
+  <img class="open" src="folder-open.png">
+  <span>home</span>
+</div>
+
+<!-- popup preview window -->
+<div id="popup">
+  <div class="popup-window">
+
+    <div class="popup-header">
+      <div id="popup-close">×</div>
+    </div>
+
+    <div id="popup-content" class="popup-body"></div>
+
+  </div>
+</div>
+
+<div id="transition"></div>
+
+<!-- interaction script -->
+<script src="binary.js"></script>
+<script src="landing.js"></script>
+
+</body>
+</html>

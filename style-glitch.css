@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+.glitch {
+  color: white;
+  font-size: 6rem;
+  position: relative;
+  cursor: pointer;
+}
+
+.glitch::before,
+.glitch::after {
+  content: "memory";
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.glitch:hover::before {
+  color: red;
+  animation: glitchTop 0.2s infinite;
+  opacity: 0.8;
+}
+
+.glitch:hover::after {
+  color: blue;
+  animation: glitchBottom 0.2s infinite;
+  opacity: 0.8;
+}
+
+@keyframes glitchTop {
+  0% { transform: translate(2px, -2px); }
+  25% { transform: translate(-2px, 2px); }
+  50% { transform: translate(2px, 2px); }
+  75% { transform: translate(-2px, -2px); }
+  100% { transform: translate(2px, -2px); }
+}
+
+@keyframes glitchBottom {
+  0% { transform: translate(-2px, 2px); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, -2px); }
+  75% { transform: translate(2px, 2px); }
+  100% { transform: translate(-2px, 2px); }
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fade 800ms linear forwards;
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.5);
+  }
+}

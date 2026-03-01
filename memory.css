@@ -1,0 +1,152 @@
+/* =======================
+   Base
+======================= */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow: hidden;
+  height: 100%;
+  font-family: "Reddit Mono", monospace;
+}
+
+/* =======================
+   Background Layers
+======================= */
+
+/* binary background */
+#binary {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* particles */
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =======================
+   Memory Container
+======================= */
+
+#memory {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  cursor: pointer;
+}
+
+#memory.active {
+  opacity: 1;
+}
+
+#memory video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* =======================
+   FLOATING MEMORY BUTTONS
+======================= */
+
+#remember,
+#return {
+  position: absolute; /* required for floating */
+  
+  background: none;
+  border: none;
+  color: white;
+
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+
+  z-index: 10;
+}
+
+#remember:hover,
+#return:hover {
+  opacity: 1;
+}
+
+/* ensure font consistency */
+button {
+  font-family: inherit;
+}
+
+/* =======================
+   Cursor Particles
+======================= */
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fade 800ms linear forwards;
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.5);
+  }
+}
+
+/* =======================
+   Transition Overlay
+======================= */
+
+#transition {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 20000;
+  pointer-events: none;
+
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+#transition.fade-out {
+  opacity: 0;
+}
+
+#transition.active {
+  opacity: 1;
+}
+
+#screen-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+
+  pointer-events: none;
+  z-index: 9999;
+
+  opacity: 0.12;
+  mix-blend-mode: screen;
+}

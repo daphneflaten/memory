@@ -1,0 +1,98 @@
+html, body {
+  margin: 0;
+  background: black;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Reddit Mono", monospace;
+  color: white;
+}
+
+.login-container {
+  text-align: center;
+}
+
+.icon {
+  width: 230px;          /* bigger */
+  display: block;        /* removes inline weirdness */
+  margin: 0 auto 25px;   /* centers + space under */
+}
+
+input {
+  background: white;
+  border: none;
+  padding: 10px;
+  color: rgb(0, 0, 0);
+  font-family: inherit;
+  text-align: center;
+  outline: none;
+}
+
+button {
+  display: block;
+  margin: 15px auto 0;
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+button:hover {
+  color: lightgray;
+}
+
+#error {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  opacity: 0;
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fade 800ms linear forwards;
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.5);
+  }
+}
+
+#screen-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+
+  pointer-events: none;
+  z-index: 9999;
+
+  opacity: 0.12;
+  mix-blend-mode: screen;
+}
+
+.icon {
+  animation: fadein 0.2s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadein {
+  to { opacity: 1; }
+}
+

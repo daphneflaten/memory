@@ -1,0 +1,34 @@
+#binary {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  font-family: "Reddit Mono", monospace;
+  z-index: 0;
+}
+
+.bit {
+  position: absolute;
+  color: #ffffff;
+  opacity: 0;
+  font-size: 0.85rem;
+  animation: floatBits linear forwards;
+  text-shadow: 0 0 4px rgba(255,255,255,0.15);
+}
+
+@keyframes floatBits {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20% {
+    opacity: 0.35;
+  }
+  80% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}

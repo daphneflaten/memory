@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const lbl = document.createElement("span")
           lbl.className = "file-label"
-          lbl.textContent = (mem.scent || "unknown") + ".txt"
+          lbl.textContent = `${mem.emotion || "unknown"}_${(mem.scent || "unknown").replace(/\s+/g, "_")}.txt`
 
           fileUnit.appendChild(img)
           fileUnit.appendChild(lbl)
@@ -215,21 +215,118 @@ document.addEventListener("DOMContentLoaded", () => {
      FIREBASE REAL-TIME LISTENER
   ========================== */
 
-  onSnapshot(collection(db, "memories"), (snapshot) => {
-    snapshot.docChanges().forEach(change => {
-      if(change.type === "added"){
-        const mem = change.doc.data()
-        if(!mem.category || mem.category === "undefined") return
-        if(!byCategory[mem.category]) byCategory[mem.category] = []
-        const exists = byCategory[mem.category].some(m => m.timestamp === mem.timestamp && m.scent === mem.scent)
-        if(!exists){
-          byCategory[mem.category].push(mem)
-          rebuildFolders()
-        }
+onSnapshot(collection(db, "memories"), (snapshot) => {
+  snapshot.docChanges().forEach(change => {
+    if(change.type === "added"){
+      const mem = change.doc.data()
+      if(!mem.category || mem.category === "undefined") return
+      if(!byCategory[mem.category]) byCategory[mem.category] = []
+      const exists = byCategory[mem.category].some(m => m.timestamp === mem.timestamp && m.scent === mem.scent)
+      if(!exists){
+        byCategory[mem.category].push(mem)
+        rebuildFolders()
+        showNotification(mem)
+      }
+    }
+  })
+})
+/* ==========================
+   NOTIFICATION SYSTEM
+========================== */
+
+const notifToggle = document.createElement("div")
+notifToggle.id = "notif-toggle"
+notifToggle.textContent = "notifications ●"
+document.body.appendChild(notifToggle)
+
+const notifStack = document.createElement("div")
+notifStack.id = "notif-stack"
+document.body.appendChild(notifStack)
+
+let notifsVisible = true
+const notifLog = []
+
+notifToggle.addEventListener("click", ()=>{
+  notifsVisible = !notifsVisible
+  notifToggle.textContent = notifsVisible ? "notifications ●" : "notifications ○"
+
+  if(notifsVisible){
+    notifStack.classList.remove("hidden")
+    notifStack.innerHTML = ""
+    notifLog.forEach(mem => addNotifToStack(mem, false))
+  } else {
+    notifStack.classList.add("hidden")
+  }
+})
+
+function addNotifToStack(mem, animate){
+
+  const notif = document.createElement("div")
+  notif.className = "notif"
+  if(!animate) notif.classList.add("show")
+
+  notif.innerHTML = `
+    <div class="notif-label">memory archived</div>
+    <div class="notif-scent">${mem.scent || "unknown"}</div>
+    <div class="notif-emotion">${mem.emotion || "—"}</div>
+    <button class="notif-locate">locate file</button>
+  `
+
+  notif.querySelector(".notif-locate").addEventListener("click", (e)=>{
+    e.stopPropagation()
+
+    // find and open the matching folder
+    const folders = document.querySelectorAll(".memory-folder")
+    folders.forEach(folder => {
+      const mems = JSON.parse(folder.dataset.memories || "[]")
+      const match = mems.find(m => m.scent === mem.scent && m.emotion === mem.emotion && m.timestamp === mem.timestamp)
+      if(match){
+        // close notifs panel
+        notifsVisible = false
+        notifStack.classList.add("hidden")
+        notifToggle.textContent = "notifications ○"
+
+        // open the folder
+        folder.click()
+
+        // then find and click the matching file after folder opens
+        setTimeout(()=>{
+          const fileUnits = document.querySelectorAll(".file-unit")
+          const fileName = `${mem.emotion || "unknown"}_${(mem.scent || "unknown").replace(/\s+/g, "_")}.txt`
+          fileUnits.forEach(unit => {
+            const lbl = unit.querySelector(".file-label")
+            if(lbl && lbl.textContent === fileName){
+              unit.click()
+            }
+          })
+        }, 100)
       }
     })
   })
 
+  notifStack.prepend(notif)
+
+  if(animate){
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        notif.classList.add("show")
+      })
+    })
+
+    setTimeout(()=>{
+      notif.classList.remove("show")
+      notif.classList.add("hide")
+      setTimeout(()=> notif.remove(), 400)
+    }, 5000)
+  }
+
+}
+
+function showNotification(mem){
+  notifLog.unshift(mem)
+  if(!notifsVisible) return
+  addNotifToStack(mem, true)
+}
   /* ==========================
      ANIMATION LOOP
   ========================== */
@@ -275,58 +372,75 @@ document.addEventListener("DOMContentLoaded", () => {
   const errorOk = document.getElementById("error-ok")
   if (errorOk) errorOk.addEventListener("click", () => errorModal.classList.remove("active"))
 
-  /* ==========================
-     RANDOM ERRORS
-  ========================== */
+/* ==========================
+   RANDOM ERRORS
+========================== */
 
-  const errorMessages = [
-    "im getting hungry",
-    "ummmmmm i forget",
-    "im kinda tired",
-    "some memories should be forgotten",
-    "memory cant always be remembered",
-    "your memories from 2005 are disappearing",
-    "some memories want to be forgotten",
-  ]
+const errorMessages = [
+  "im getting hungry",
+  "ummmmmm i forget",
+  "im kinda tired",
+  "some memories should be forgotten",
+  "memory cant always be remembered",
+  "your memories from 2005 are disappearing",
+  "some memories want to be forgotten",
+]
 
-  function spawnRandomError() {
-    const message = errorMessages[Math.floor(Math.random() * errorMessages.length)]
-    const errorBox = document.createElement("div")
-    errorBox.className = "random-error"
-    const x = Math.random() * (window.innerWidth - 360)
-    const y = Math.random() * (window.innerHeight - 240)
-    errorBox.style.left = `${x}px`
-    errorBox.style.top = `${y}px`
-    const header = document.createElement("div")
-    header.className = "random-error-header"
-    const close = document.createElement("div")
-    close.className = "random-error-close"
-    close.textContent = "×"
-    header.appendChild(close)
-    const body = document.createElement("div")
-    body.className = "random-error-body"
-    const title = document.createElement("h1")
-    title.textContent = "ALERT"
-    const text = document.createElement("p")
-    text.textContent = message
-    const ok = document.createElement("button")
-    ok.className = "random-error-ok"
-    ok.textContent = "OK"
-    body.appendChild(title)
-    body.appendChild(text)
-    body.appendChild(ok)
-    errorBox.appendChild(header)
-    errorBox.appendChild(body)
-    close.addEventListener("click", () => errorBox.remove())
-    ok.addEventListener("click", () => errorBox.remove())
-    randomErrorsContainer.appendChild(errorBox)
-  }
+function spawnRandomError() {
+  const message = errorMessages[Math.floor(Math.random() * errorMessages.length)]
+  const errorBox = document.createElement("div")
+  errorBox.className = "random-error"
+  const x = Math.random() * (window.innerWidth - 360)
+  const y = Math.random() * (window.innerHeight - 240)
+  errorBox.style.left = `${x}px`
+  errorBox.style.top = `${y}px`
+  const header = document.createElement("div")
+  header.className = "random-error-header"
+  const close = document.createElement("div")
+  close.className = "random-error-close"
+  close.textContent = "×"
+  header.appendChild(close)
+  const body = document.createElement("div")
+  body.className = "random-error-body"
+  const title = document.createElement("h1")
+  title.textContent = "ALERT"
+  const text = document.createElement("p")
+  text.textContent = message
+  const ok = document.createElement("button")
+  ok.className = "random-error-ok"
+  ok.textContent = "OK"
+  body.appendChild(title)
+  body.appendChild(text)
+  body.appendChild(ok)
+  errorBox.appendChild(header)
+  errorBox.appendChild(body)
+  close.addEventListener("click", () => errorBox.remove())
+  ok.addEventListener("click", () => errorBox.remove())
+  randomErrorsContainer.appendChild(errorBox)
+}
 
-  document.addEventListener("click", (e) => {
-    if (e.target.closest(".memory-folder") || e.target.closest("#popup") || e.target.closest(".random-error")) return
-    spawnRandomError()
-  })
+const warningBtn = document.createElement("img")
+warningBtn.src = "warning.png"
+warningBtn.style.cssText = `
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  cursor: pointer;
+  z-index: 60000;
+  opacity: .7;
+  transition: opacity .2s;
+`
+warningBtn.addEventListener("mouseenter", ()=> warningBtn.style.opacity = "1")
+warningBtn.addEventListener("mouseleave", ()=> warningBtn.style.opacity = ".7")
+document.body.appendChild(warningBtn)
 
+warningBtn.addEventListener("click", (e)=>{
+  e.stopPropagation()
+  spawnRandomError()
+})
   /* ==========================
      CURSOR PARTICLES
   ========================== */

@@ -1,0 +1,321 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: white;
+  font-family: "Reddit Mono", monospace;
+  overflow: hidden;
+}
+
+/* PAGE FADE */
+
+.page {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.page.visible {
+  opacity: 1;
+}
+
+.page.exit {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+/* TOP TEXT */
+
+.top-text {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.system-line {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.instruction {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* PICKER */
+
+.picker-container {
+  position: relative;
+  height: 270px;
+  margin-top: 60px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-indicator {
+  position: absolute;
+  width: 80%;
+  height: 60px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.picker-mask {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    white 0%,
+    rgba(255,255,255,0) 30%,
+    rgba(255,255,255,0) 70%,
+    white 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.picker {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  text-align: center;
+}
+
+.picker::-webkit-scrollbar {
+  display: none;
+}
+
+.picker-item {
+  height: 60px;
+  line-height: 60px;
+  scroll-snap-align: center;
+  font-size: 16px;
+  opacity: 0.3;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.picker-item.active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* DEFINITION */
+
+.emotion-definition {
+  margin-top: 20px;
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+  padding: 0 40px;
+  min-height: 40px;
+  transition: opacity 0.3s ease;
+}
+
+/* BUTTON */
+
+.confirm-section {
+  position: fixed;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+button {
+  padding: 14px 36px;
+  border: 1px solid black;
+  background: white;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+button:hover {
+  background: black;
+  color: white;
+}
+
+button:disabled {
+  opacity: 0.4;
+}
+
+/* REFLECTION */
+
+.reflection-section {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  z-index: 5;
+}
+
+.reflection-section.visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.reflection-slide {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* center horizontally */
+  justify-content: center;    /* center vertically */
+
+  transform: translateX(100%);
+  transition: transform 0.5s ease;
+}
+
+/* Active slide */
+.reflection-slide.active {
+  transform: translateX(0);
+}
+
+/* Slides behind */
+.reflection-slide.previous {
+  transform: translateX(-100%);
+}
+
+textarea {
+  width: 80%;
+  max-width: 320px;
+  height: 100px;
+  border: 1px solid black;
+  padding: 12px;
+  margin-top: 20px;
+}
+
+.vivid-options {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.vivid-square {
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.vivid-square.selected {
+  background: black;
+}
+
+/* CONTROLS */
+
+.reflection-controls {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 80%;              /* was 100% */
+  max-width: 420px;
+
+  display: flex;
+  justify-content: center;  /* center both buttons */
+  gap: 16px;                /* space BETWEEN buttons */
+
+  padding: 0 20px;
+}
+
+.reflection-controls.centered {
+  justify-content: center;
+}
+
+.reflection-controls.centered #backBtn {
+  display: none;
+}
+
+/* OVERLAYS */
+
+.pixel-overlay,
+.diffusion-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.pixel-overlay {
+  transition: opacity 0.8s ease;
+}
+
+/* ================= VIVIDNESS SCALE ================= */
+
+.vividness-scale {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.vivid-block {
+  width: 32px;
+  height: 32px;
+  border: 1px solid black;
+  background: white;
+  cursor: pointer;
+  transition: 
+    background 0.25s ease,
+    transform 0.15s ease;
+}
+
+.vivid-block:hover {
+  transform: scale(1.1);
+}
+
+.vivid-block.active {
+  background: black;
+}
+
+.vividness-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  max-width: 260px;
+  margin: 12px auto 0;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* LOADING VIDEO */
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#loadingVideo {
+  width: 100%;
+  height: 50%;
+  object-fit: cover;
+}
+

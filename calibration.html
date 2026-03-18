@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>m3m0ry calibration</title>
+<link rel="preload" href="https://fonts.gstatic.com/s/redditmonofont/v0/Reddit_Mono.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="calibration.css">
+
+</head>
+
+<body>
+
+<img src="screen.jpeg" class="screen-filter">
+
+<video class="bg-video" autoplay muted loop playsinline webkit-playsinline>
+  <source src="type-graphic.mp4" type="video/mp4">
+</video>
+
+<div class="tree">
+
+<div id="introScreen" class="intro-screen">
+  <img src="cats.gif" class="intro-gif">
+  <img src="welcome.png" class="intro-text">
+  <p class="intro-tap">tap anywhere to begin</p>
+</div>
+
+  <div id="categoryLabel" class="category-label" style="opacity:0">scanning scent categories...</div>
+  <div id="categoryNode" class="category-box"></div>
+  <div id="scentsBranch" class="branch"></div>
+
+  <div id="analysisNode" class="node"></div>
+  <div id="notesNode" class="node"></div>
+  <div id="emotionNode" class="node"></div>
+  <div id="archiveNode" class="node"></div>
+
+</div>
+
+<div id="navBar" class="nav-bar"></div>
+
+<script type="module" src="landing.js"></script>
+<script type="module" src="calibration.js"></script>
+</body>
+</html>

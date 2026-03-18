@@ -1,0 +1,279 @@
+html, body {
+  margin: 0;
+  background: white;
+  font-family: "Reddit Mono", monospace;
+}
+
+/* Header */
+
+.archive-header {
+  text-align: center;
+  margin: 30px 0 60px 0;
+  font-size: 14px;
+}
+
+/* Drawer stack */
+
+.drawer {
+  width: 92%;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Folder */
+
+.folder {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border: 1px solid black;
+  border-radius: 0px;
+  background: white;
+  margin-top: -60px; /* tight overlap */
+  padding: 40px 24px 24px 24px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.folder:first-child {
+  margin-top: 0;
+}
+
+.folder:hover {
+  transform: translateY(-6px);
+  z-index: 5;
+}
+
+
+/* Folder title inside */
+
+.folder-body h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Viewer overlay */
+
+.viewer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 20;
+}
+
+.viewer-backdrop.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.folder-viewer {
+  position: relative;
+  width: 90%;
+  max-width: 520px;
+  background: white;
+  border: 1px solid black;
+  border-radius: 0;
+  padding: 40px 28px 28px 28px;
+
+  display: flex;              /* 👈 add */
+  flex-direction: column;     /* 👈 add */
+  align-items: center;        /* 👈 add */
+
+  transform: translateY(30px);
+  transition: transform 0.4s ease;
+}
+
+.viewer-backdrop.visible .folder-viewer {
+  transform: translateY(0);
+}
+
+/* Forget button uses same style as close */
+
+.forget-btn {
+  margin-top: 14px;
+}
+
+.close-btn,
+.forget-btn {
+  padding: 12px 26px;
+  border: 1px solid black;
+  background: white;
+  font-family: inherit;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.close-btn:hover,
+.forget-btn:hover {
+  background: black;
+  color: white;
+}
+
+
+/* Bottom Navigation */
+
+.nav-bar {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 520px;
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+}
+
+#homeBtn {
+  background: white;
+  border: 1px solid black;
+  padding: 10px 22px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#homeBtn:hover {
+  background: black;
+  color: white;
+}
+
+/* Warning overlay */
+
+.forget-warning {
+  position: fixed;
+  inset: 0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 100;
+}
+
+.forget-warning.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.forget-warning p {
+  max-width: 320px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.warning-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Forget popup buttons */
+
+.warning-actions button {
+  padding: 12px 26px;
+  border: 1px solid black;
+  background: white;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.warning-actions button:hover {
+  background: black;
+  color: white;
+}
+
+
+
+/* Pixel Suppress Overlay */
+
+.suppress-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  display: none;
+}
+
+.suppress-overlay.active {
+  display: grid;
+}
+
+.archive-fade {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.archive-visible {
+  opacity: 1;
+}
+
+/* Archive page fade in */
+
+.page-fade {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.page-visible {
+  opacity: 1;
+}
+
+
+
+.folder-tab,
+.viewer-tab {
+  position: absolute;
+  top: -33px;
+  height: 34px;
+  padding: 0 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  z-index: 3;
+
+  /* Trapezoid shape */
+  clip-path: polygon(
+    12% 0%,
+    88% 0%,
+    100% 100%,
+    0% 100%
+  );
+
+  background: black; /* fallback */
+  color: white;
+}
+
+/* Page fade system */
+
+.page-fade {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.page-visible {
+  opacity: 1;
+}
+
+.page-exit {
+  opacity: 0;
+}

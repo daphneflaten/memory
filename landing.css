@@ -99,7 +99,7 @@ html, body {
   opacity: 0;
   pointer-events: none;
 
-  z-index: 5;
+  z-index: 2000;
 }
 
 #popup.active {
@@ -424,4 +424,16 @@ html, body {
 .random-error-ok:hover {
   color: black;
   background: white;
+}
+
+.popup-body {
+  padding: 30px 40px 40px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 24px;
+}
+
+.popup-body.text-view {
+  display: block;
+  padding: 0;
 }

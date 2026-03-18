@@ -1,0 +1,210 @@
+{
+  "M0M'S PURS3": [
+  {
+    "name": "caramel candy",
+    "notes": {
+      "top": ["burnt sugar"],
+      "heart": ["warm caramel"],
+      "base": ["buttery sweetness"]
+    }
+  },
+  {
+    "name": "hand lotion",
+    "notes": {
+      "top": ["soft floral"],
+      "heart": ["creamy lotion"],
+      "base": ["powder"]
+    }
+  },
+  {
+    "name": "old leather wallet",
+    "notes": {
+      "top": ["leather"],
+      "heart": ["paper receipts"],
+      "base": ["aged fabric"]
+    }
+  },
+  {
+    "name": "loose coins",
+    "notes": {
+      "top": ["metal"],
+      "heart": ["warm copper"],
+      "base": ["fabric lining"]
+    }
+  }
+  ],
+  "FORGOT+EN OBJ3ECTS": [
+    {
+      "name": "inside a pencil case",
+      "notes": {
+        "top": ["graphite", "wood shavings"],
+        "heart": ["rubber", "plastic zipper"],
+        "base": ["canvas fabric"]
+      }
+    },
+    {
+      "name": "long-unused suitcase",
+      "notes": {
+        "top": ["dust", "stale air"],
+        "heart": ["fabric lining", "cardboard"],
+        "base": ["aged leather"]
+      }
+    },
+    {
+      "name": "camera bag fabric",
+      "notes": {
+        "top": ["synthetic nylon"],
+        "heart": ["dust", "rubber padding"],
+        "base": ["aged foam"]
+      }
+    },
+    {
+      "name": "shoebox under a bed",
+      "notes": {
+        "top": ["cardboard dust"],
+        "heart": ["fabric lint"],
+        "base": ["aged paper"]
+      }
+    }
+  ],
+
+  "WARM M4CHINES": [
+    {
+      "name": "hot dust from a radiator",
+      "notes": {
+        "top": ["warm dust"],
+        "heart": ["heated metal"],
+        "base": ["dry air"]
+      }
+    },
+    {
+      "name": "overheated laptop vent",
+      "notes": {
+        "top": ["warm plastic"],
+        "heart": ["electric heat"],
+        "base": ["dry circuitry"]
+      }
+    },
+    {
+      "name": "lamp that has been on all night",
+      "notes": {
+        "top": ["warm glass"],
+        "heart": ["heated dust"],
+        "base": ["faint ozone"]
+      }
+    },
+    {
+      "name": "back of a refrigerator",
+      "notes": {
+        "top": ["metal warmth"],
+        "heart": ["dust buildup"],
+        "base": ["machine oil"]
+      }
+    }
+  ],
+  "IN-BETWEEN SP4CES": [
+    {
+      "name": "air rushing from a freezer",
+      "notes": {
+        "top": ["cold metal"],
+        "heart": ["frost air"],
+        "base": ["plastic lining"]
+      }
+    },
+    {
+      "name": "inside an elevator",
+      "notes": {
+        "top": ["metal air"],
+        "heart": ["cleaning chemical"],
+        "base": ["rubber flooring"]
+      }
+    },
+    {
+      "name": "subway tunnel air",
+      "notes": {
+        "top": ["mineral dust"],
+        "heart": ["oil residue"],
+        "base": ["damp concrete"]
+      }
+    },
+    {
+      "name": "empty movie theater",
+      "notes": {
+        "top": ["stale popcorn"],
+        "heart": ["fabric seats"],
+        "base": ["carpet dust"]
+      }
+    }
+  ],
+
+  "AFT3R THE RA1N": [
+    {
+      "name": "wet soil",
+      "notes": {
+        "top": ["petrichor"],
+        "heart": ["damp earth"],
+        "base": ["moss"]
+      }
+    },
+    {
+      "name": "rain on warm asphalt",
+      "notes": {
+        "top": ["mineral rain"],
+        "heart": ["heated pavement"],
+        "base": ["city dust"]
+      }
+    },
+    {
+      "name": "moss on a damp rock",
+      "notes": {
+        "top": ["green moisture"],
+        "heart": ["wet moss"],
+        "base": ["stone"]
+      }
+    },
+    {
+      "name": "rotting leaves in autumn",
+      "notes": {
+        "top": ["wet leaves"],
+        "heart": ["forest soil"],
+        "base": ["decay"]
+      }
+    }
+  ],
+
+  "0DD SMELL5": [
+    {
+      "name": "a candle just blown out",
+      "notes": {
+        "top": ["smoke"],
+        "heart": ["melted wax"],
+        "base": ["charred wick"]
+      }
+    },
+    {
+      "name": "inside a halloween mask",
+      "notes": {
+        "top": ["rubber"],
+        "heart": ["plastic"],
+        "base": ["trapped breath"]
+      }
+    },
+    {
+      "name": "balloon that just popped",
+      "notes": {
+        "top": ["latex"],
+        "heart": ["static air"],
+        "base": ["rubber"]
+      }
+    },
+    {
+      "name": "warm pennies in your hand",
+      "notes": {
+        "top": ["metal"],
+        "heart": ["skin warmth"],
+        "base": ["oxidized copper"]
+      }
+    }
+  ]
+  
+}

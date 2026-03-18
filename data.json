@@ -1,0 +1,239 @@
+{
+  "emotions": {
+    "calm": {
+      "definition": "a state of quiet ease and steadiness.",
+      "meaning": "this scent may connect to moments where your body felt settled.",
+      "color": "#c7d9d3"
+    },
+    "nostalgia": {
+      "definition": "a sentimental longing for the past.",
+      "meaning": "this scent may connect to early environments or familiar spaces.",
+      "color": "#d8c3a5"
+    },
+    "safety": {
+      "definition": "a feeling of protection and security.",
+      "meaning": "this scent may relate to trust or emotional shelter.",
+      "color": "#cbd5e1"
+    },
+    "loneliness": {
+      "definition": "a feeling of isolation or absence.",
+      "meaning": "this scent may surface memories of distance or separation.",
+      "color": "#a3a9b3"
+    },
+    "grief": {
+      "definition": "deep sorrow in response to loss.",
+      "meaning": "this scent may connect to something or someone no longer present.",
+      "color": "#6e7a8a"
+    },
+    "joy": {
+      "definition": "a feeling of lightness and happiness.",
+      "meaning": "this scent may reflect moments of ease and openness.",
+      "color": "#f6d365"
+    },
+    "embarrassment": {
+      "definition": "self-conscious discomfort.",
+      "meaning": "this scent may connect to vulnerable or formative social moments.",
+      "color": "#e8b4b8"
+    },
+    "desire": {
+      "definition": "a strong feeling of wanting or longing.",
+      "meaning": "this scent may be tied to attraction or anticipation.",
+      "color": "#c06c84"
+    },
+    "anxiety": {
+      "definition": "a feeling of unease or uncertainty.",
+      "meaning": "this scent may connect to unpredictability or tension.",
+      "color": "#5c6b73"
+    },
+    "warmth": {
+      "definition": "a sense of emotional or physical closeness.",
+      "meaning": "this scent may relate to comfort or intimacy.",
+      "color": "#e6a57e"
+    },
+    "childhood": {
+      "definition": "association with early life experiences.",
+      "meaning": "this scent may connect to foundational or formative years.",
+      "color": "#f2e8cf"
+    },
+    "loss": {
+      "definition": "the absence of something once present.",
+      "meaning": "this scent may carry traces of change or transition.",
+      "color": "#9aa1a6"
+    },
+    "hope": {
+      "definition": "a feeling of possibility or optimism.",
+      "meaning": "this scent may relate to expectation or forward movement.",
+      "color": "#b5e48c"
+    },
+    "shame": {
+      "definition": "a painful sense of inadequacy.",
+      "meaning": "this scent may surface moments of self-evaluation.",
+      "color": "#a47148"
+    },
+    "comfort": {
+      "definition": "a state of emotional ease.",
+      "meaning": "this scent may signal familiarity or belonging.",
+      "color": "#d6ccc2"
+    },
+    "excitement": {
+      "definition": "heightened energy or anticipation.",
+      "meaning": "this scent may connect to moments of change or discovery.",
+      "color": "#ffb703"
+    },
+    "irritation": {
+      "definition": "mild frustration or annoyance.",
+      "meaning": "this scent may link to subtle discomfort or impatience.",
+      "color": "#e76f51"
+    },
+    "intimacy": {
+      "definition": "a feeling of closeness and connection.",
+      "meaning": "this scent may relate to shared or private moments.",
+      "color": "#b5838d"
+    },
+    "homesickness": {
+      "definition": "longing for a familiar place.",
+      "meaning": "this scent may connect to belonging or displacement.",
+      "color": "#c9ada7"
+    },
+    "pride": {
+      "definition": "a sense of accomplishment or self-worth.",
+      "meaning": "this scent may relate to achievement or recognition.",
+      "color": "#355070"
+    },
+    "isolation": {
+      "definition": "a sense of separation from others.",
+      "meaning": "this scent may reflect solitude or emotional distance.",
+      "color": "#7d8597"
+    },
+    "surprise": {
+      "definition": "a reaction to the unexpected.",
+      "meaning": "this scent may connect to sudden or vivid memory flashes.",
+      "color": "#90dbf4"
+    },
+    "tenderness": {
+      "definition": "gentle affection or care.",
+      "meaning": "this scent may relate to nurturing or softness.",
+      "color": "#f8c8dc"
+    },
+    "melancholy": {
+      "definition": "a quiet, reflective sadness.",
+      "meaning": "this scent may connect to contemplative or subdued memories.",
+      "color": "#8e9aaf"
+    },
+    "fear": {
+      "definition": "a response to perceived threat.",
+      "meaning": "this scent may link to moments of alertness or vulnerability.",
+      "color": "#2f3e46"
+    },
+    "contentment": {
+      "definition": "a feeling of peaceful satisfaction.",
+      "meaning": "this scent may reflect balance or acceptance.",
+      "color": "#cad2c5"
+    },
+    "curiosity": {
+      "definition": "a desire to explore or understand.",
+      "meaning": "this scent may connect to discovery or new environments.",
+      "color": "#a8dadc"
+    },
+    "regret": {
+      "definition": "sadness about past actions or outcomes.",
+      "meaning": "this scent may relate to reflection or reconsideration.",
+      "color": "#6d6875"
+    },
+    "relief": {
+      "definition": "release from tension or stress.",
+      "meaning": "this scent may signal resolution or exhale.",
+      "color": "#b7e4c7"
+    },
+    "love": {
+      "definition": "deep affection or attachment.",
+      "meaning": "this scent may connect to enduring emotional bonds.",
+      "color": "#ff8fab"
+    }
+  },
+
+"seedArchive": [
+  {
+    "scentId": "scent1",
+    "emotion": "nostalgia",
+    "intensity": 7,
+    "reflection": "wet pavement outside my childhood house. summer evenings.",
+    "timestamp": 1712458800000
+  },
+  {
+    "scentId": "scent2",
+    "emotion": "comfort",
+    "intensity": 9,
+    "reflection": "laundry room warmth. towels just pulled from the dryer.",
+    "timestamp": 1715140800000
+  },
+  {
+    "scentId": "scent3",
+    "emotion": "anxiety",
+    "intensity": 6,
+    "reflection": "sterile hallway before an appointment. quiet but tense.",
+    "timestamp": 1717819200000
+  },
+  {
+    "scentId": "scent4",
+    "emotion": "joy",
+    "intensity": 8,
+    "reflection": "cut grass and sunscreen. end of school year.",
+    "timestamp": 1720497600000
+  },
+  {
+    "scentId": "scent5",
+    "emotion": "grief",
+    "intensity": 5,
+    "reflection": "old books in a closed room. dust suspended in light.",
+    "timestamp": 1723176000000
+  },
+  {
+    "scentId": "scent6",
+    "emotion": "hope",
+    "intensity": 6,
+    "reflection": "fresh air through an open window in early spring.",
+    "timestamp": 1725854400000
+  },
+  {
+    "scentId": "scent7",
+    "emotion": "homesickness",
+    "intensity": 8,
+    "reflection": "someone else's kitchen that almost smelled familiar.",
+    "timestamp": 1728532800000
+  },
+  {
+    "scentId": "scent8",
+    "emotion": "relief",
+    "intensity": 4,
+    "reflection": "rain after humidity. the air finally shifted.",
+    "timestamp": 1731211200000
+  },
+  {
+    "scentId": "scent9",
+    "emotion": "curiosity",
+    "intensity": 6,
+    "reflection": "metallic scent of a new device just opened.",
+    "timestamp": 1733889600000
+  },
+  {
+    "scentId": "scent10",
+    "emotion": "melancholy",
+    "intensity": 7,
+    "reflection": "late afternoon light and fading perfume.",
+    "timestamp": 1736568000000
+  }
+],
+"scents": {
+  "scent1": { "name": "first rain" },
+  "scent2": { "name": "warm linen" },
+  "scent3": { "name": "sterile air" },
+  "scent4": { "name": "cut grass" },
+  "scent5": { "name": "dusty books" },
+  "scent6": { "name": "spring air" },
+  "scent7": { "name": "foreign kitchen" },
+  "scent8": { "name": "post rain" },
+  "scent9": { "name": "new device" },
+  "scent10": { "name": "fading perfume" }
+}
+}

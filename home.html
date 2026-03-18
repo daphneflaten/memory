@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>m3m0ry archive</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css">
+</head>
+<body class="page-fade">
+  <div class="nav-bar">
+  <button id="homeBtn">main menu</button>
+</div>
+  <div class="archive-header">
+    <p>calibration archive</p>
+  </div>
+
+  <div class="drawer" id="drawer"></div>
+
+  <div class="viewer-backdrop" id="viewerBackdrop">
+    <div class="folder-viewer">
+      <div class="viewer-tab" id="viewerTab"></div>
+      <div class="viewer-body" id="viewerBody"></div>
+<div class="viewer-actions">
+    <button class="forget-btn" id="forgetBtn">forget</button>
+  <button class="close-btn" id="closeViewer">close</button>
+</div>   
+</div>
+  </div>
+
+  <div class="forget-warning" id="forgetWarning">
+  <div>
+    <p>
+      you can suppress it, but memories do not disappear. they resurface.
+    </p>
+    <div class="warning-actions">
+      <button id="confirmForget">suppress</button>
+      <button id="cancelForget">keep</button>
+    </div>
+  </div>
+</div>
+
+  <script src="home.js"></script>
+  <div class="suppress-overlay" id="suppressOverlay"></div>
+</body>
+</html>

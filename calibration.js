@@ -18,6 +18,7 @@ let selectedScent
 let selectedCategory
 let selectedEmotion
 let selectedVividness
+let selectedMemoryText = ""
 
 document.querySelector('.bg-video').playbackRate = .4
 
@@ -464,7 +465,10 @@ function showMemoryInput(){
           saveBtn.innerHTML = `<img src="arrow.png" alt="continue">`
           document.body.appendChild(saveBtn)
           setTimeout(()=> saveBtn.classList.add("show"), 100)
-          saveBtn.onclick = saveMemory
+          saveBtn.onclick = ()=>{
+            selectedMemoryText = document.getElementById("memoryInput")?.value || ""
+            saveMemory()
+          }
         }
 
       })
@@ -475,7 +479,10 @@ function showMemoryInput(){
     continueBtn.innerHTML = `<img src="arrow.png" alt="continue">`
     document.body.appendChild(continueBtn)
     setTimeout(()=> continueBtn.classList.add("show"), 150)
-    continueBtn.onclick = saveMemory
+    continueBtn.onclick = ()=>{
+      selectedMemoryText = document.getElementById("memoryInput")?.value || ""
+      saveMemory()
+    }
 
   },400)
 
@@ -523,7 +530,7 @@ async function uploadMemory(){
     scent: selectedScent ? selectedScent.name : "unknown",
     emotion: selectedEmotion || "",
     vividness: selectedVividness || 0,
-    text: document.getElementById("memoryInput")?.value || "",
+    text: selectedMemoryText,
     timestamp: Date.now()
   }
 

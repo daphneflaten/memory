@@ -214,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================
      FIREBASE REAL-TIME LISTENER
   ========================== */
+let initialLoadDone = false
 
 onSnapshot(collection(db, "memories"), (snapshot) => {
   snapshot.docChanges().forEach(change => {
@@ -225,10 +226,18 @@ onSnapshot(collection(db, "memories"), (snapshot) => {
       if(!exists){
         byCategory[mem.category].push(mem)
         rebuildFolders()
-        showNotification(mem)
+        // only show notification for truly new submissions, not initial page load
+        if(initialLoadDone){
+          showNotification(mem)
+        }
       }
     }
   })
+
+  // after first snapshot batch is processed, mark initial load as done
+  if(!initialLoadDone){
+    initialLoadDone = true
+  }
 })
 /* ==========================
    NOTIFICATION SYSTEM

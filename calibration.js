@@ -44,7 +44,7 @@ fetch("scents.json")
 
     setTimeout(()=>{
       introScreen.remove()
-      startCalibration()
+window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html"
     }, 800)
 
   })
@@ -632,31 +632,24 @@ function showArchivedText(){
 
     setTimeout(()=>{
 
-      emotionNode.innerHTML = `
-        <div class="memory-ui">
-          <div class="scent-grid">
-            <button id="viewArchiveBtn">view archive</button>
-            <button id="againBtn" style="background:none;border:none;padding:0;cursor:pointer;">
-              <img src="redo-white.png" style="width:48px;height:48px;object-fit:contain;">
-            </button>
-          </div>
-        </div>
-      `
+emotionNode.innerHTML = `
+  <div class="memory-ui">
+    <div class="scent-grid">
+      <button id="viewArchiveBtn">view archive</button>
+      <button id="againBtn" style="background:none;border:none;padding:0;cursor:pointer;">
+        <img src="redo-white.png" style="width:48px;height:48px;object-fit:contain;">
+      </button>
+    </div>
+  </div>
+`
 
-      requestAnimationFrame(()=>{
-        requestAnimationFrame(()=>{
-          emotionNode.style.transition = "opacity 1.2s ease"
-          emotionNode.style.opacity = "1"
-        })
-      })
+document.getElementById("viewArchiveBtn").onclick = ()=>{
+  window.location.href = "https://daphneflaten.github.io/m3m0ry-app/index.html"
+}
 
-      document.getElementById("viewArchiveBtn").onclick = ()=>{
-        window.location.href = "https://daphneflaten.github.io/m3m0ry-app/index.html"
-      }
-
-      document.getElementById("againBtn").onclick = ()=>{
-        window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html"
-      }
+document.getElementById("againBtn").onclick = ()=>{
+  window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html"
+}
 
     },600)
 
@@ -839,10 +832,10 @@ function suppressMemory(){
               })
             })
 
-            document.getElementById("againBtn").onclick = ()=>{
-              whiteBg.remove()
-              window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html"
-            }
+document.getElementById("againBtn").onclick = ()=>{
+  whiteBg.remove()
+  window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html"
+}
 
           },600)
 

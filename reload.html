@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m3m0ry reload</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="calibration.css">
+</head>
+
+<body>
+
+<img src="screen.jpeg" class="screen-filter">
+
+<div class="tree">
+
+  <!-- STEP 1: TEXT -->
+  <div id="archivedText" class="memory-ui" style="opacity:0;">
+    <p class="memory-label">memory archived</p>
+  </div>
+
+  <!-- STEP 2: REDO ONLY -->
+  <div id="reloadUI" class="memory-ui" style="opacity:0; pointer-events:none;">
+    <button id="againBtn">
+      <img src="redo-white.png" alt="redo">
+    </button>
+  </div>
+
+</div>
+
+<script>
+  const archivedText = document.getElementById("archivedText")
+  const reloadUI = document.getElementById("reloadUI")
+
+  // STEP 1: Fade IN "memory archived"
+  setTimeout(() => {
+    archivedText.style.transition = "opacity 1.2s ease"
+    archivedText.style.opacity = "1"
+  }, 200)
+
+  // STEP 2: Fade OUT text
+  setTimeout(() => {
+    archivedText.style.transition = "opacity 1s ease"
+    archivedText.style.opacity = "0"
+
+    setTimeout(() => {
+      archivedText.style.display = "none"
+
+      // STEP 3: Fade IN redo button
+      reloadUI.style.transition = "opacity 1.2s ease"
+      reloadUI.style.opacity = "1"
+      reloadUI.style.pointerEvents = "auto"
+
+    }, 800)
+
+  }, 2200)
+
+  // REDO ACTION
+  document.getElementById("againBtn").onclick = () => {
+    window.location.href = "calibration.html"
+  }
+</script>
+
+</body>
+</html>

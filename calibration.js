@@ -587,17 +587,13 @@ async function uploadMemory(){
   requestAnimationFrame(()=>{
     videoOverlay.style.opacity = "1"
   })
+  
 
   vid.play().catch(()=>{})
 
-  setTimeout(()=>{
-    videoOverlay.style.transition = "opacity .6s ease"
-    videoOverlay.style.opacity = "0"
-    setTimeout(()=>{
-      videoOverlay.remove()
-      showArchivedText()
-    },600)
-  }, 4000)
+setTimeout(()=>{
+  window.location.href = "reload.html"
+}, 4000)
 
 }
 /* ================= ARCHIVED TEXT ================= */

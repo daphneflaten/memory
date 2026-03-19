@@ -569,3 +569,11 @@ video::-webkit-media-controls-start-playback-button {
   font-size: .6rem;
   color: white;
 }
+#againBtn {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#reloadUI[style*="opacity: 1"] #againBtn {
+  opacity: 1;
+}

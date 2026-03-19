@@ -525,6 +525,13 @@ function saveMemory(){
 
 async function uploadMemory(){
 
+  console.log("uploadMemory called")
+  console.log("category:", selectedCategory)
+  console.log("scent:", selectedScent?.name)
+  console.log("emotion:", selectedEmotion)
+  console.log("vividness:", selectedVividness)
+  console.log("text:", selectedMemoryText)
+
   const memory = {
     category: selectedCategory,
     scent: selectedScent ? selectedScent.name : "unknown",
@@ -534,8 +541,11 @@ async function uploadMemory(){
     timestamp: Date.now()
   }
 
+  console.log("saving memory:", memory)
+
   try {
-    await addDoc(collection(db, "memories"), memory)
+    const docRef = await addDoc(collection(db, "memories"), memory)
+    console.log("saved successfully with id:", docRef.id)
   } catch(e) {
     console.error("error saving memory:", e)
   }
@@ -590,7 +600,6 @@ async function uploadMemory(){
   }, 4000)
 
 }
-
 /* ================= ARCHIVED TEXT ================= */
 
 function showArchivedText(){

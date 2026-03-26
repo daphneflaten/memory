@@ -57,7 +57,7 @@ passwordInput.addEventListener("keydown", (e) => {
 
 function checkPassword() {
   if (passwordInput.value === correctPassword) {
-    window.location.href = "landing.html";   // archive page
+    window.location.href = "archive.html";
   } else {
     error.style.opacity = 1;
   }

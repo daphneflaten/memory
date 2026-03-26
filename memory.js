@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transition.classList.remove("fade-out");
 
     setTimeout(() => {
-      window.location.href = "landing.html";
+      window.location.href = "archive.html";
     }, 600);
   });
 

@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.appendChild(snapshot)
       if (onReady) onReady()
       const ctx = snapshot.getContext("2d")
-      const pixelSize = 18
+      const pixelSize = 28
       const cols = Math.ceil(snapshot.width / pixelSize)
       const rows = Math.ceil(snapshot.height / pixelSize)
       const pixels = []
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       let index = 0
       const fill = setInterval(() => {
-        for (let i = 0; i < 8 && index < pixels.length; i++, index++)
+        for (let i = 0; i < 18 && index < pixels.length; i++, index++)
           ctx.clearRect(pixels[index].x, pixels[index].y, pixelSize, pixelSize)
         if (index >= pixels.length) { clearInterval(fill); snapshot.remove() }
       }, 16)

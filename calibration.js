@@ -187,7 +187,7 @@ function showBranches() {
 
 function fitToThreeLines(el) {
   const lineHeight = parseFloat(getComputedStyle(el).fontSize) * 0.9
-  const maxHeight = lineHeight * 2
+  const maxHeight = lineHeight * 3
   let size = parseFloat(getComputedStyle(el).fontSize)
   while (el.getBoundingClientRect().height > maxHeight + 1 && size > 12) {
     size -= 0.5
@@ -312,7 +312,7 @@ function showEmotionOptions() {
 
     emotionNode.innerHTML = `
       <div class="emotion-ui">
-        <p class="emotion-label">select the emotion that scent triggers</p>
+        <p class="emotion-label">what does it make you feel?</p>
         <div class="picker-container">
           <div class="picker" id="picker"></div>
         </div>
@@ -507,8 +507,8 @@ function showMemorySlide3() {
 
     const isVideo = file.type.startsWith("video/")
 
-    if (isVideo && file.size > 50 * 1024 * 1024) {
-      showFileError("video too large — keep clips under 30 seconds")
+    if (isVideo && file.size > 25 * 1024 * 1024) {
+      showFileError("video too large — keep clips under 15 seconds")
       e.target.value = ""
       return
     }
@@ -619,42 +619,47 @@ async function uploadMemory() {
 
   let imageUrl = null
 
-  if (selectedFile) {
-    const ext = selectedFileType === "video" ? (selectedFile.name?.split(".").pop() || "mp4") : "jpg"
-    const storageRef = ref(storage, `memories/${Date.now()}.${ext}`)
-    const contentType = selectedFileType === "video" ? (selectedFile.type || "video/mp4") : "image/jpeg"
-
-    if (uploadBtn) uploadBtn.textContent = "uploading... 0%"
-
-    imageUrl = await new Promise((resolve, reject) => {
-      const task = uploadBytesResumable(storageRef, selectedFile, { contentType })
-      task.on("state_changed",
-        snap => {
-          const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100)
-          if (uploadBtn) uploadBtn.textContent = `uploading... ${pct}%`
-        },
-        reject,
-        () => getDownloadURL(task.snapshot.ref).then(resolve)
-      )
-    })
-  }
-
-  const memory = {
-    category: selectedCategory,
-    scent: selectedScent ? selectedScent.name : "unknown",
-    emotion: selectedEmotion || "",
-    vividness: selectedVividness || 0,
-    text: selectedMemoryText,
-    image: imageUrl,
-    imageType: selectedFileType || null,
-    timestamp: Date.now()
-  }
-
   try {
-    const docRef = await addDoc(collection(db, "memories"), memory)
-    console.log("saved successfully with id:", docRef.id)
+    if (selectedFile) {
+      const ext = selectedFileType === "video" ? (selectedFile.name?.split(".").pop() || "mp4") : "jpg"
+      const storageRef = ref(storage, `memories/${Date.now()}.${ext}`)
+      const contentType = selectedFileType === "video" ? (selectedFile.type || "video/mp4") : "image/jpeg"
+
+      if (uploadBtn) uploadBtn.textContent = "uploading... 0%"
+
+      imageUrl = await new Promise((resolve, reject) => {
+        const task = uploadBytesResumable(storageRef, selectedFile, { contentType })
+        task.on("state_changed",
+          snap => {
+            const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100)
+            if (uploadBtn) uploadBtn.textContent = `uploading... ${pct}%`
+          },
+          reject,
+          () => getDownloadURL(task.snapshot.ref).then(resolve)
+        )
+      })
+    }
+
+    if (uploadBtn) uploadBtn.textContent = "saving..."
+
+    const memory = {
+      category: selectedCategory,
+      scent: selectedScent ? selectedScent.name : "unknown",
+      emotion: selectedEmotion || "",
+      vividness: selectedVividness || 0,
+      text: selectedMemoryText,
+      image: imageUrl,
+      imageType: selectedFileType || null,
+      timestamp: Date.now()
+    }
+
+    await addDoc(collection(db, "memories"), memory)
+
   } catch(e) {
-    console.error("error saving memory:", e)
+    console.error("upload error:", e)
+    if (uploadBtn) uploadBtn.textContent = "upload to archive"
+    alert(`upload failed: ${e.message}`)
+    return
   }
 
   const nav = document.getElementById("navBar")

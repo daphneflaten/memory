@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"
-import { getFirestore, collection, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJ4VKbXyNI4wGPRXRefP_7xqzJIQ89F6s",
@@ -419,108 +419,21 @@ document.addEventListener("DOMContentLoaded", () => {
      FIREBASE REAL-TIME LISTENER
   ========================== */
 
-  let initialLoadDone = false
-
-  onSnapshot(collection(db, "memories"), (snapshot) => {
-    snapshot.docChanges().forEach(change => {
-      if (change.type === "added") {
-        const mem = { ...change.doc.data(), _docId: change.doc.id }
-        if (!mem.category || mem.category === "undefined") return
-        if (!byCategory[mem.category]) byCategory[mem.category] = []
-        const exists = byCategory[mem.category].some(m => m.timestamp === mem.timestamp && m.scent === mem.scent)
-        if (!exists) {
-          byCategory[mem.category].push(mem)
-          rebuildFolders()
-          if (initialLoadDone) showNotification(mem)
-        }
-      }
+  getDocs(collection(db, "memories")).then(snapshot => {
+    snapshot.forEach(docSnap => {
+      const mem = { ...docSnap.data(), _docId: docSnap.id }
+      if (!mem.category || mem.category === "undefined") return
+      if (!byCategory[mem.category]) byCategory[mem.category] = []
+      byCategory[mem.category].push(mem)
     })
-    if (!initialLoadDone) initialLoadDone = true
+    rebuildFolders()
+    restoreReturn()
   })
 
   /* ==========================
      NOTIFICATION SYSTEM
   ========================== */
 
-  const notifToggle = document.createElement("div")
-  notifToggle.id = "notif-toggle"
-  notifToggle.textContent = "notifications ●"
-  document.body.appendChild(notifToggle)
-
-  const notifStack = document.createElement("div")
-  notifStack.id = "notif-stack"
-  document.body.appendChild(notifStack)
-
-  let notifsVisible = true
-  const notifLog = []
-
-  notifToggle.addEventListener("click", () => {
-    notifsVisible = !notifsVisible
-    notifToggle.textContent = notifsVisible ? "notifications ●" : "notifications ○"
-
-    if (notifsVisible) {
-      notifStack.classList.remove("hidden")
-      notifStack.innerHTML = ""
-      notifLog.forEach(mem => addNotifToStack(mem, false))
-    } else {
-      notifStack.classList.add("hidden")
-    }
-  })
-
-  function addNotifToStack(mem, animate) {
-    const notif = document.createElement("div")
-    notif.className = "notif"
-    if (!animate) notif.classList.add("show")
-
-    notif.innerHTML = `
-      <div class="notif-label">memory archived</div>
-      <div class="notif-scent">${mem.scent || "unknown"}</div>
-      <div class="notif-emotion">${mem.emotion || "—"}</div>
-      <button class="notif-locate">locate file</button>
-    `
-
-    notif.querySelector(".notif-locate").addEventListener("click", (e) => {
-      e.stopPropagation()
-      const folders = document.querySelectorAll(".memory-folder")
-      folders.forEach(folder => {
-        const mems = JSON.parse(folder.dataset.memories || "[]")
-        const match = mems.find(m => m.scent === mem.scent && m.emotion === mem.emotion && m.timestamp === mem.timestamp)
-        if (match) {
-          notifsVisible = false
-          notifStack.classList.add("hidden")
-          notifToggle.textContent = "notifications ○"
-          folder.click()
-          setTimeout(() => {
-            const fileUnits = document.querySelectorAll(".file-unit")
-            const fileName = `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
-            fileUnits.forEach(unit => {
-              const lbl = unit.querySelector(".file-label")
-              if (lbl && lbl.textContent === fileName) unit.click()
-            })
-          }, 100)
-        }
-      })
-    })
-
-    notifStack.prepend(notif)
-
-    if (animate) {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => { notif.classList.add("show") })
-      })
-      setTimeout(() => {
-        notif.classList.remove("show")
-        notif.classList.add("hide")
-        setTimeout(() => notif.remove(), 400)
-      }, 5000)
-    }
-  }
-
-  function showNotification(mem) {
-    notifLog.unshift(mem)
-    if (!notifsVisible) return
-    addNotifToStack(mem, true)
-  }
 
   /* ==========================
      ANIMATION LOOP

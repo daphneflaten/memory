@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const memory = document.getElementById("memory");
-  const video = memory.querySelector("video");
   const rememberBtn = document.getElementById("remember");
   const returnBtn = document.getElementById("return");
   const container = document.getElementById("particles");
@@ -9,6 +8,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let blurAmount = 10;
   let focusRadius = 80;
+
+  // build media element from sessionStorage
+  const mediaData = sessionStorage.getItem("memoryImage");
+  const mediaType = sessionStorage.getItem("memoryImageType");
+  let mediaEl;
+  const isVideo = mediaType === "video" || (mediaData && mediaData.startsWith("data:video"));
+  if (mediaData && isVideo) {
+    mediaEl = document.createElement("video");
+    mediaEl.autoplay = true;
+    mediaEl.muted = true;
+    mediaEl.loop = true;
+    mediaEl.playsInline = true;
+    mediaEl.src = mediaData;
+  } else if (mediaData) {
+    mediaEl = document.createElement("img");
+    mediaEl.src = mediaData;
+  }
+  if (mediaEl) memory.appendChild(mediaEl);
 
   /* ==========================
      FADE IN ON LOAD
@@ -27,18 +44,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   memory.addEventListener("mousemove", (e) => {
+    if (!mediaEl) return;
 
     const rect = memory.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    video.style.filter = `blur(${blurAmount}px)`;
+    mediaEl.style.filter = `blur(${blurAmount}px)`;
 
-    video.style.maskImage =
-      `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
-
-    video.style.webkitMaskImage =
-      `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
+    mediaEl.style.maskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
+    mediaEl.style.webkitMaskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
   });
 
   /* ==========================
@@ -47,10 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("mouseleave", () => {
     memory.classList.remove("active");
-
-    video.style.filter = "none";
-    video.style.maskImage = "none";
-    video.style.webkitMaskImage = "none";
+    if (!mediaEl) return;
+    mediaEl.style.filter = "none";
+    mediaEl.style.maskImage = "none";
+    mediaEl.style.webkitMaskImage = "none";
   });
 
   /* ==========================

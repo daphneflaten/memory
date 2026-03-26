@@ -14,9 +14,10 @@ html, body {
 }
 
 .icon {
-  width: 230px;          /* bigger */
-  display: block;        /* removes inline weirdness */
-  margin: 0 auto 25px;   /* centers + space under */
+  width: 230px;
+  display: block;
+  margin: 0 auto 25px;
+  filter: invert(1);
 }
 
 input {

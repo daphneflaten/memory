@@ -1,38 +1,39 @@
 {
   "M0M'S PURS3": [
-  {
-    "name": "caramel candy",
-    "notes": {
-      "top": ["burnt sugar"],
-      "heart": ["warm caramel"],
-      "base": ["buttery sweetness"]
+    {
+      "name": "caramel candy",
+      "notes": {
+        "top": ["burnt sugar"],
+        "heart": ["warm caramel"],
+        "base": ["buttery sweetness"]
+      }
+    },
+    {
+      "name": "hand lotion",
+      "notes": {
+        "top": ["soft floral"],
+        "heart": ["creamy lotion"],
+        "base": ["powder"]
+      }
+    },
+    {
+      "name": "old leather wallet",
+      "notes": {
+        "top": ["leather"],
+        "heart": ["paper receipts"],
+        "base": ["aged fabric"]
+      }
+    },
+    {
+      "name": "loose coins",
+      "notes": {
+        "top": ["metal"],
+        "heart": ["warm copper"],
+        "base": ["fabric lining"]
+      }
     }
-  },
-  {
-    "name": "hand lotion",
-    "notes": {
-      "top": ["soft floral"],
-      "heart": ["creamy lotion"],
-      "base": ["powder"]
-    }
-  },
-  {
-    "name": "old leather wallet",
-    "notes": {
-      "top": ["leather"],
-      "heart": ["paper receipts"],
-      "base": ["aged fabric"]
-    }
-  },
-  {
-    "name": "loose coins",
-    "notes": {
-      "top": ["metal"],
-      "heart": ["warm copper"],
-      "base": ["fabric lining"]
-    }
-  }
   ],
+
   "FORGOT+EN OBJ3ECTS": [
     {
       "name": "inside a pencil case",
@@ -102,6 +103,7 @@
       }
     }
   ],
+
   "IN-BETWEEN SP4CES": [
     {
       "name": "air rushing from a freezer",
@@ -205,6 +207,355 @@
         "base": ["oxidized copper"]
       }
     }
+  ],
+
+  "CH1LDH00D PL4CES": [
+    {
+      "name": "under a playground slide",
+      "notes": {
+        "top": ["sun-warmed plastic"],
+        "heart": ["dust", "metal bolts"],
+        "base": ["dry dirt"]
+      }
+    },
+    {
+      "name": "inside a crayon box",
+      "notes": {
+        "top": ["wax"],
+        "heart": ["paper wrappers"],
+        "base": ["faint pigment"]
+      }
+    },
+    {
+      "name": "ball pit at a party place",
+      "notes": {
+        "top": ["plastic"],
+        "heart": ["trapped air"],
+        "base": ["rubber floor"]
+      }
+    },
+    {
+      "name": "elementary school hallway",
+      "notes": {
+        "top": ["floor cleaner"],
+        "heart": ["paper", "pencil shavings"],
+        "base": ["stale air"]
+      }
+    }
+  ],
+
+  "S0FT TH1NGS": [
+    {
+      "name": "freshly washed blanket",
+      "notes": {
+        "top": ["detergent"],
+        "heart": ["cotton"],
+        "base": ["warmth"]
+      }
+    },
+    {
+      "name": "inside a stuffed animal",
+      "notes": {
+        "top": ["fabric"],
+        "heart": ["dust"],
+        "base": ["old stuffing"]
+      }
+    },
+    {
+      "name": "worn hoodie sleeve",
+      "notes": {
+        "top": ["skin"],
+        "heart": ["detergent fade"],
+        "base": ["cotton warmth"]
+      }
+    },
+    {
+      "name": "pillow after a long nap",
+      "notes": {
+        "top": ["soft warmth"],
+        "heart": ["fabric"],
+        "base": ["faint sweat"]
+      }
+    }
+  ],
+
+  "PL4STIC + SYNTH3TIC": [
+    {
+      "name": "new shower curtain",
+      "notes": {
+        "top": ["vinyl"],
+        "heart": ["chemical plastic"],
+        "base": ["humid air"]
+      }
+    },
+    {
+      "name": "opening a new inflatable pool toy",
+      "notes": {
+        "top": ["sharp plastic"],
+        "heart": ["trapped air"],
+        "base": ["rubber"]
+      }
+    },
+    {
+      "name": "cheap earbuds wire",
+      "notes": {
+        "top": ["rubber coating"],
+        "heart": ["warm plastic"],
+        "base": ["metal hint"]
+      }
+    },
+    {
+      "name": "binder from office supply store",
+      "notes": {
+        "top": ["plastic shell"],
+        "heart": ["paper"],
+        "base": ["glue"]
+      }
+    }
+  ],
+
+  "SUMM3R H34T": [
+    {
+      "name": "hot car seat",
+      "notes": {
+        "top": ["heated fabric"],
+        "heart": ["plastic dashboard"],
+        "base": ["trapped air"]
+      }
+    },
+    {
+      "name": "pool chlorine on skin",
+      "notes": {
+        "top": ["chlorine"],
+        "heart": ["wet skin"],
+        "base": ["sun warmth"]
+      }
+    },
+    {
+      "name": "melted ice cream on pavement",
+      "notes": {
+        "top": ["sweet cream"],
+        "heart": ["sugar"],
+        "base": ["hot concrete"]
+      }
+    },
+    {
+      "name": "sunblock on shoulders",
+      "notes": {
+        "top": ["coconut chemical"],
+        "heart": ["lotion"],
+        "base": ["warm skin"]
+      }
+    }
+  ],
+
+  "N1GHT T1ME": [
+    {
+      "name": "open window at night",
+      "notes": {
+        "top": ["cool air"],
+        "heart": ["distant grass"],
+        "base": ["humidity"]
+      }
+    },
+    {
+      "name": "street after midnight",
+      "notes": {
+        "top": ["cold asphalt"],
+        "heart": ["faint smoke"],
+        "base": ["empty air"]
+      }
+    },
+    {
+      "name": "TV left on in a dark room",
+      "notes": {
+        "top": ["warm static"],
+        "heart": ["dust"],
+        "base": ["electric hum"]
+      }
+    },
+    {
+      "name": "bedsheets at 3am",
+      "notes": {
+        "top": ["body warmth"],
+        "heart": ["cotton"],
+        "base": ["still air"]
+      }
+    }
+  ],
+
+  "K1TCHEN M0MENTS": [
+    {
+      "name": "toaster just popped",
+      "notes": {
+        "top": ["burnt bread"],
+        "heart": ["heat"],
+        "base": ["crumbs"]
+      }
+    },
+    {
+      "name": "opening the freezer too long",
+      "notes": {
+        "top": ["cold air"],
+        "heart": ["frozen plastic"],
+        "base": ["stale ice"]
+      }
+    },
+    {
+      "name": "sink after washing dishes",
+      "notes": {
+        "top": ["soap"],
+        "heart": ["wet metal"],
+        "base": ["food residue"]
+      }
+    },
+    {
+      "name": "inside a microwave after use",
+      "notes": {
+        "top": ["steam"],
+        "heart": ["heated leftovers"],
+        "base": ["plastic"]
+      }
+    }
+  ],
+
+  "P4P3R + PR1NT": [
+    {
+      "name": "old paperback book",
+      "notes": {
+        "top": ["dry paper"],
+        "heart": ["ink"],
+        "base": ["dust"]
+      }
+    },
+    {
+      "name": "fresh magazine pages",
+      "notes": {
+        "top": ["glossy ink"],
+        "heart": ["paper coating"],
+        "base": ["chemical print"]
+      }
+    },
+    {
+      "name": "receipt just printed",
+      "notes": {
+        "top": ["thermal paper"],
+        "heart": ["ink"],
+        "base": ["faint plastic"]
+      }
+    },
+    {
+      "name": "notebook left in a bag",
+      "notes": {
+        "top": ["paper"],
+        "heart": ["fabric"],
+        "base": ["graphite"]
+      }
+    }
+  ],
+
+  "0UTS1DE THE H0USE": [
+    {
+      "name": "garage interior",
+      "notes": {
+        "top": ["oil"],
+        "heart": ["concrete dust"],
+        "base": ["rubber"]
+      }
+    },
+    {
+      "name": "mailbox in summer",
+      "notes": {
+        "top": ["hot metal"],
+        "heart": ["paper"],
+        "base": ["sun air"]
+      }
+    },
+    {
+      "name": "trash bins on a hot day",
+      "notes": {
+        "top": ["sour waste"],
+        "heart": ["plastic"],
+        "base": ["heat"]
+      }
+    },
+    {
+      "name": "garden hose water",
+      "notes": {
+        "top": ["metallic water"],
+        "heart": ["rubber hose"],
+        "base": ["warm pavement"]
+      }
+    }
+  ],
+
+  "CLO5E C0NTACT": [
+    {
+      "name": "hugging someone’s jacket",
+      "notes": {
+        "top": ["fabric"],
+        "heart": ["perfume trace"],
+        "base": ["body warmth"]
+      }
+    },
+    {
+      "name": "back of someone’s neck",
+      "notes": {
+        "top": ["skin"],
+        "heart": ["salt"],
+        "base": ["warmth"]
+      }
+    },
+    {
+      "name": "holding hands too long",
+      "notes": {
+        "top": ["skin"],
+        "heart": ["warmth"],
+        "base": ["faint metal (rings)"]
+      }
+    },
+    {
+      "name": "someone’s scarf in winter",
+      "notes": {
+        "top": ["wool"],
+        "heart": ["cold air"],
+        "base": ["perfume residue"]
+      }
+    }
+  ],
+
+  "DIG1TAL L1FE": [
+    {
+      "name": "phone overheating in hand",
+      "notes": {
+        "top": ["warm glass"],
+        "heart": ["battery heat"],
+        "base": ["plastic"]
+      }
+    },
+    {
+      "name": "gaming controller after hours",
+      "notes": {
+        "top": ["plastic"],
+        "heart": ["sweat"],
+        "base": ["rubber grips"]
+      }
+    },
+    {
+      "name": "charging cable near outlet",
+      "notes": {
+        "top": ["faint ozone"],
+        "heart": ["warm plastic"],
+        "base": ["dust"]
+      }
+    },
+    {
+      "name": "opening a new laptop box",
+      "notes": {
+        "top": ["cardboard"],
+        "heart": ["clean electronics"],
+        "base": ["foam"]
+      }
+    }
   ]
-  
 }

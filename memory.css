@@ -50,13 +50,22 @@ html, body {
   opacity: 1;
 }
 
-#memory video {
+#memory video,
+#memory img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   object-fit: cover;
+}
+
+#memory-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(ellipse 65% 65% at 50% 50%, transparent 35%, black 100%);
 }
 
 /* =======================
@@ -66,9 +75,9 @@ html, body {
 #remember,
 #return {
   position: absolute; /* required for floating */
-  
+
   background: none;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.4);
   color: white;
 
   padding: 8px 16px;
@@ -145,7 +154,7 @@ button {
   object-fit: cover;
 
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
 
   opacity: 0.12;
   mix-blend-mode: screen;

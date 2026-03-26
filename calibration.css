@@ -16,6 +16,7 @@
   --tb-weight: 400;
   --ts-size: 1.15rem;
   --ts-weight: 400;
+  --t-small: 1.15rem;
 }
 
 /* ===== RESET & BASE ===== */
@@ -24,7 +25,7 @@ body {
   background: #000;
   color: white;
   font-family: var(--font);
-  font-size: var(--tb-size);
+  font-size: var(--ts-size);
   font-weight: var(--tb-weight);
   height: 100vh;
   overflow: hidden;
@@ -93,9 +94,9 @@ body {
 .scent-prompt {
   margin-bottom: 20px;
   text-align: center;
-  color: rgb(164, 164, 164);
+  color: white;
   transition: opacity .4s ease;
-  font-size: var(--ts-size);
+  font-size: var(--tb-size);
 }
 
 /* ===== SCENT BRANCH ===== */
@@ -201,8 +202,8 @@ button:hover {
   top: calc(50% - 100px);
   left: 50%;
   transform: translateX(-50%);
-  font-size: var(--ts-size);
-  opacity: .6;
+  font-size: var(--t-small);
+  opacity: 0.5;
   white-space: nowrap;
 }
 
@@ -246,7 +247,7 @@ button:hover {
 }
 
 .selected-scent {
-  font-size: var(--t1-size);
+  font-size: var(--ts-size);
   font-weight: var(--t1-weight);
   background: white;
   color: black;
@@ -255,8 +256,8 @@ button:hover {
 }
 
 .emotion-label {
-  font-size: var(--ts-size);
-  opacity: .7;
+  font-size: var(--tb-size);
+  opacity: 1;
 }
 
 /* ===== PICKER ===== */
@@ -305,13 +306,14 @@ button:hover {
   height: 60px;
   line-height: 60px;
   scroll-snap-align: center;
+  font-size: 1.3rem;
   opacity: .3;
   transition: .2s;
-  color: white;        /* ← add this */
+  color: white;
 }
 
 .picker-item.active {
-  font-size: var(--t3-size);
+  font-size: 1.5rem;
   opacity: 1;
   transform: scale(1.12);
   color: white;
@@ -335,8 +337,8 @@ button:hover {
 }
 
 .memory-label {
-  font-size: var(--ts-size);
-  opacity: .7;
+  font-size: var(--tb-size);
+  opacity: 1;
   margin-bottom: 20px;
 }
 
@@ -347,7 +349,7 @@ textarea {
   color: white;
   border: 1px solid white;
   font-family: var(--font);
-  font-size: var(--tb-size);
+  font-size: var(--ts-size);
   padding: 12px;
   resize: none;
   box-sizing: border-box;
@@ -393,7 +395,7 @@ textarea {
   width: 100%;
   margin-top: 12px;
   font-size: var(--ts-size);
-  opacity: .6;
+  opacity: 1;
 }
 
 .category-label {
@@ -401,10 +403,9 @@ textarea {
   top: calc(50% - 120px);
   left: 50%;
   transform: translateX(-50%);
-  font-size: var(--ts-size);
-  opacity: 1;
+  font-size: var(--t-small);
+  opacity: 0.5;
   white-space: nowrap;
-
 }
 
 .notes-grid {
@@ -430,12 +431,12 @@ textarea {
 }
 
 .notes-type {
-  font-size: var(--ts-size);
-  opacity: .5;
+  font-size: var(--t-small);
+  opacity: 0.5;
 }
 
 .notes-value {
-  font-size: var(--tb-size);
+  font-size: var(--ts-size);
   text-align: center;
   line-height: 1.6;
 }
@@ -514,7 +515,7 @@ video::-webkit-media-controls-start-playback-button {
 }
 
 .intro-text {
-  font-size: var(--t2-size);
+  font-size: var(--ts-size);
   color: white;
   opacity: 0;
   animation: fadeIn 1.2s forwards .6s;
@@ -524,8 +525,8 @@ video::-webkit-media-controls-start-playback-button {
 }
 
 .intro-tap {
-  font-size: 12px;
-  color: rgb(187, 187, 187);
+  font-size: var(--t-small);
+  color: white;
   opacity: 0;
   animation: fadeIn 1.2s forwards 1s;
   margin: 0;
@@ -570,10 +571,62 @@ video::-webkit-media-controls-start-playback-button {
   color: white;
 }
 #againBtn {
-  opacity: 0;
-  transition: opacity 1s ease;
+  opacity: 1;
 }
 
-#reloadUI[style*="opacity: 1"] #againBtn {
-  opacity: 1;
+/* VIVIDNESS BAR */
+.vividness-section {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 10px;
+}
+
+.vivid-bar-container {
+  position: relative;
+  width: 100%;
+  height: 36px;
+  border: 1px solid white;
+  cursor: pointer;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.vivid-bar-fill {
+  height: 100%;
+  background: white;
+  width: 0%;
+  transition: width .05s ease;
+  pointer-events: none;
+}
+
+.vivid-bar-labels {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: var(--t-small);
+  pointer-events: none;
+  mix-blend-mode: difference;
+  color: rgba(255,255,255,0.5);
+}
+
+.vivid-value-display {
+  text-align: center;
+  font-size: var(--t-small);
+  opacity: 0.5;
+  margin-top: 8px;
+}
+
+/* IMAGE SECTION */
+.image-section {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 10px;
+}
+.category-box.scent-selected .category-name {
+  text-transform: lowercase;
 }

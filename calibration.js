@@ -116,7 +116,6 @@ function runCategoryScan() {
 
 const categoryDescriptions = {
   "M0M'S PURS3":         "smells from someone who took care of you",
-  "FORG0TT3N OBJ3CTS":  "things that disappeared without you noticing",
   "WARM M4CHINES":       "electronics, appliances, the hum of daily life",
   "IN-BETWEEN SP4CES":   "hallways, waiting rooms, places you passed through",
   "AFT3R THE RA1N":      "the smell of the world after water",
@@ -451,16 +450,25 @@ function showMemoryInput() {
 }
 
 function showMemorySlide1() {
-  const placeholder = memoryPlaceholders[Math.floor(Math.random() * memoryPlaceholders.length)]
-
   emotionNode.innerHTML = `
     <div class="memory-ui">
-      <p class="memory-label">log your memory</p>
-      <textarea id="memoryInput" placeholder="${placeholder}"></textarea>
+      <p class="memory-label">write what you remember</p>
+      <textarea id="memoryInput"></textarea>
     </div>
   `
   emotionNode.style.display = "flex"
   emotionNode.style.opacity = "1"
+
+  const textarea = document.getElementById("memoryInput")
+  const shuffled = [...memoryPlaceholders].sort(() => Math.random() - 0.5)
+  let pIdx = 0
+  textarea.placeholder = shuffled[pIdx]
+  const placeholderInterval = setInterval(() => {
+    if (document.activeElement === textarea) return
+    pIdx = (pIdx + 1) % shuffled.length
+    textarea.placeholder = shuffled[pIdx]
+  }, 3000)
+  textarea.addEventListener("focus", () => clearInterval(placeholderInterval))
 
   const continueBtn = document.createElement("button")
   continueBtn.id = "continueBtn"
@@ -838,7 +846,7 @@ function suppressMemory() {
             })
             document.getElementById("againBtn").onclick = () => {
               whiteBg.remove()
-              window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html"
+              window.location.href = "calibration.html"
             }
           }, 600)
         }, 2400)
@@ -850,12 +858,12 @@ function suppressMemory() {
 /* ================= NAV ================= */
 
 const navSteps = [
-  { label: "category", onclick: () => window.location.href = "https://daphneflaten.github.io/m3m0ry-app/calibration.html" },
-  { label: "scent",    onclick: () => { emotionNode.style.opacity="0"; notesNode.style.opacity="0"; analysisNode.style.opacity="0"; categoryNode.classList.add("active"); setTimeout(() => showBranches(), 400) } },
-  { label: "notes",    onclick: () => showEmotionContinue() },
-  { label: "emotion",  onclick: () => showEmotionOptions() },
-  { label: "log",      onclick: () => showMemoryInput() },
-  { label: "complete", onclick: null }
+  { label: "category" },
+  { label: "scent" },
+  { label: "notes" },
+  { label: "emotion" },
+  { label: "log" },
+  { label: "complete" }
 ]
 
 let currentNavStep = -1
@@ -881,9 +889,6 @@ function updateNav(stepLabel) {
     seg.className = i === stepIndex ? "nav-segment current" : "nav-segment"
     seg.dataset.index = i
 
-    if (i < stepIndex && step.onclick) {
-      seg.onclick = () => { currentNavStep = i; step.onclick() }
-    }
 
     nav.appendChild(seg)
 

@@ -80,13 +80,18 @@ body {
 }
 
 .category-desc {
-  display: block;
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  max-width: 400px;
   font-size: .95rem;
   color: rgba(255,255,255,.45);
-  margin-top: 24px;
   font-weight: 400;
   letter-spacing: .02em;
   line-height: 1.4;
+  text-align: center;
 }
 
 .category-name {
@@ -552,21 +557,16 @@ video::-webkit-media-controls-start-playback-button {
 }
 
 .nav-segment {
-  cursor: pointer;
+  cursor: default;
   opacity: .4;
-  transition: opacity .2s;
   font-size: .9rem;
-  text-transform: uppercase;
+  text-transform: lowercase;
   color: white;
-}
-
-.nav-segment:hover {
-  opacity: 1;
+  pointer-events: none;
 }
 
 .nav-segment.current {
   opacity: 1;
-  cursor: default;
 }
 
 .nav-divider {

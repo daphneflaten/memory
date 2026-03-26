@@ -127,11 +127,11 @@ document.addEventListener("DOMContentLoaded", () => {
         box-sizing: border-box;
         ${corrupted ? "filter: contrast(1.2);" : ""}
       ">
-        <div style="margin-bottom: 4px; opacity:.5; text-transform:uppercase; letter-spacing:.08em; font-size:.6rem;">${corrupted ? corruptText(category) : category}</div>
-        <div style="margin-bottom: 4px;">${corrupted ? corruptText("scent") : "scent"}: ${displayMem.scent || "—"}</div>
-        <div style="margin-bottom: 4px;">${corrupted ? corruptText("emotion") : "emotion"}: ${displayMem.emotion || "—"}</div>
+        <div style="margin-bottom: 4px; opacity:.5; text-transform:uppercase; letter-spacing:.08em; font-size:.6rem;">${corrupted ? `<span data-corrupt="${category}">${corruptText(category)}</span>` : category}</div>
+        <div style="margin-bottom: 4px;">${corrupted ? `<span data-corrupt="scent">${corruptText("scent")}</span>` : "scent"}: ${corrupted ? `<span data-corrupt="${mem.scent || "—"}">${corruptText(mem.scent || "—")}</span>` : (mem.scent || "—")}</div>
+        <div style="margin-bottom: 4px;">${corrupted ? `<span data-corrupt="emotion">${corruptText("emotion")}</span>` : "emotion"}: ${corrupted ? `<span data-corrupt="${mem.emotion || "—"}">${corruptText(mem.emotion || "—")}</span>` : (mem.emotion || "—")}</div>
         <div style="margin-bottom: 16px; display:flex; align-items:center; gap:8px;">
-          <span>${corrupted ? corruptText("vividness:") : "vividness:"}</span>
+          <span>${corrupted ? `<span data-corrupt="vividness:">${corruptText("vividness:")}</span>` : "vividness:"}</span>
           <div style="position:relative; width:80px; height:14px; border:1px solid white; box-sizing:border-box; flex-shrink:0;">
             <div style="height:100%; width:${corrupted ? (corruptedVivid / 5) * 100 : ((mem.vividness || 0) / 5) * 100}%; background:white;"></div>
           </div>
@@ -150,10 +150,10 @@ document.addEventListener("DOMContentLoaded", () => {
           ${!corrupted && (mem.image || mem.mov) ? `
           <button id="lookIntoBtn" style="background:none;border:1px solid white;color:white;font-family:'Reddit Mono',monospace;font-size:.6rem;padding:4px 12px;cursor:pointer;">look into memory</button>
           ` : ""}
-          <button id="suppressFileBtn" style="background:none;border:1px solid white;color:white;font-family:'Reddit Mono',monospace;font-size:.6rem;padding:4px 12px;cursor:pointer;">${corrupted ? corruptText("forget memory") : "forget memory"}</button>
+          <button id="suppressFileBtn" style="background:none;border:1px solid white;color:white;font-family:'Reddit Mono',monospace;font-size:.6rem;padding:4px 12px;cursor:pointer;">${corrupted ? `<span data-corrupt="forget memory">${corruptText("forget memory")}</span>` : "forget memory"}</button>
         </div>
         ${corrupted ? `
-        <div style="margin-top: 12px; text-align:center; opacity:.4; font-size:.6rem;">${corruptText("file corrupted — data unreadable")}</div>
+        <div style="margin-top: 12px; text-align:center; opacity:.4; font-size:.6rem;"><span data-corrupt="file corrupted — data unreadable">${corruptText("file corrupted — data unreadable")}</span></div>
         ` : `
         <div style="margin-top: 12px; text-align:center; opacity:.5; font-size:.6rem;">logged: ${dateStr}</div>
         `}
@@ -176,10 +176,10 @@ document.addEventListener("DOMContentLoaded", () => {
     clearLayer.appendChild(clone)
 
     const vivid = corrupted ? 0 : (parseFloat(mem.vividness) || 0)
-    if (corrupted || vivid < 4.5) {
-      const stepsDown = 4.5 - vivid  // each 0.5 = one step
-      const baseBlur = Math.min(7, Math.round(stepsDown * 2))    // max 7px
-      const revealRadius = Math.max(80, 140 - stepsDown * 10)   // min 80px
+    if (!corrupted && vivid < 4.5) {
+      const stepsDown = 4.5 - vivid
+      const baseBlur = Math.min(2, stepsDown * 0.6)
+      const revealRadius = Math.max(100, 160 - stepsDown * 10)
       fileWrapper.classList.add("blurred")
       fileWrapper.style.setProperty("--base-blur", `${baseBlur}px`)
       fileWrapper.style.setProperty("--reveal-radius", `${revealRadius}px`)
@@ -190,6 +190,22 @@ document.addEventListener("DOMContentLoaded", () => {
         fileWrapper.style.setProperty("--x", `${e.clientX - rect.left}px`)
         fileWrapper.style.setProperty("--y", `${e.clientY - rect.top}px`)
       })
+    }
+
+    if (corrupted) {
+      const rawFileName = `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
+      const titleEl2 = popupHeader.querySelector(".popup-title")
+      const glitchInterval = setInterval(() => {
+        fileWrapper.querySelectorAll("[data-corrupt]").forEach(el => {
+          el.textContent = corruptText(el.dataset.corrupt)
+        })
+        if (titleEl2) titleEl2.textContent = corruptText(rawFileName)
+        document.title = corruptText(rawFileName)
+      }, 120)
+      const closeObserver = new MutationObserver(() => {
+        if (!document.contains(fileWrapper)) { clearInterval(glitchInterval); closeObserver.disconnect() }
+      })
+      closeObserver.observe(document.body, { childList: true, subtree: true })
     }
 
     document.getElementById("suppressFileBtn").addEventListener("click", () => {

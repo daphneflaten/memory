@@ -34,33 +34,6 @@
     }
   ],
 
-  "FORG0TT3N OBJ3CTS": [
-    {
-      "name": "inside a pencil case",
-      "notes": {
-        "top": ["graphite", "wood shavings"],
-        "heart": ["rubber", "plastic zipper"],
-        "base": ["canvas fabric"]
-      }
-    },
-    {
-      "name": "long-unused suitcase",
-      "notes": {
-        "top": ["dust", "stale air"],
-        "heart": ["fabric lining", "cardboard"],
-        "base": ["aged leather"]
-      }
-    },
-    {
-      "name": "shoebox under a bed",
-      "notes": {
-        "top": ["cardboard dust"],
-        "heart": ["fabric lint"],
-        "base": ["aged paper"]
-      }
-    }
-  ],
-
   "WARM M4CHINES": [
     {
       "name": "hot dust from a radiator",

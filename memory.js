@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const identifier = mediaData.match(/archive\.org\/(?:embed|download)\/([^/?]+)/)?.[1] || ""
     const iframe = document.createElement("iframe");
     iframe.src = `https://archive.org/embed/${identifier}?autoplay=1&start=0`;
-    iframe.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:none;";
+    iframe.style.cssText = "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(100vw, 177.78vh);height:min(100vh, 56.25vw);border:none;pointer-events:none;";
     iframe.allow = "autoplay";
     memory.appendChild(iframe);
     mediaEl = iframe;
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let displayEl = mediaEl;
 
-  if (mediaEl && pixelSize > 1) {
+  if (mediaEl && pixelSize > 1 && !isVideo && !isEmbed) {
     const pw = Math.max(20, Math.floor(window.innerWidth / pixelSize));
     const ph = Math.max(20, Math.floor(window.innerHeight / pixelSize));
     const canvas = document.createElement("canvas");

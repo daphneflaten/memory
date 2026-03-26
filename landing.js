@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"
-import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+import { getFirestore, collection, getDocs, deleteDoc, doc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJ4VKbXyNI4wGPRXRefP_7xqzJIQ89F6s",
@@ -78,17 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  fetch("mock-archive.json")
-    .then(res => res.json())
-    .then(mockArchive => {
-      mockArchive.forEach(mem => {
-        if (!mem.category || mem.category === "undefined") return
-        if (!byCategory[mem.category]) byCategory[mem.category] = []
-        byCategory[mem.category].push(mem)
-      })
-      rebuildFolders()
-      restoreReturn()
-    })
 
   function corruptText(text) {
     if (!text) return text
@@ -126,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const ts = mem.timestamp?.toDate ? mem.timestamp.toDate() : mem.timestamp ? new Date(mem.timestamp) : null
     const dateStr = ts ? ts.toLocaleString() : "—"
 
-    popupContent.innerHTML = `
+    const contentHTML = `
       <div style="
         color: white;
         padding: 16px;
@@ -151,17 +140,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ${corrupted ? `
         <div style="line-height:1.8;">
-          ${(displayMem.text || "no memory logged.").split(' ').map(w => `<span style="background:white;color:transparent;border-radius:1px;display:inline-block;">${w}</span>`).join(' ')}
+          ${(displayMem.text || "").split(' ').filter(w => w).map(w => `<span style="background:white;color:transparent;border-radius:1px;display:inline-block;">${w}</span>`).join(' ')}
         </div>
         ` : `
-        <div class="memory-text-wrapper">
-          <div class="memory-text-blur">${mem.text || "no memory logged."}</div>
-          <div class="memory-text-clear">${mem.text || "no memory logged."}</div>
-        </div>
+        <div style="line-height:1.8;">${mem.text || ""}</div>
         `}
 
         <div style="margin-top: 24px; display:flex; justify-content:center; gap:8px;">
-          ${!corrupted && mem.image ? `
+          ${!corrupted && (mem.image || mem.mov) ? `
           <button id="lookIntoBtn" style="background:none;border:1px solid white;color:white;font-family:'Reddit Mono',monospace;font-size:.6rem;padding:4px 12px;cursor:pointer;">look into memory</button>
           ` : ""}
           <button id="suppressFileBtn" style="background:none;border:1px solid white;color:white;font-family:'Reddit Mono',monospace;font-size:.6rem;padding:4px 12px;cursor:pointer;">${corrupted ? corruptText("forget memory") : "forget memory"}</button>
@@ -174,19 +160,35 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `
 
-    if (!corrupted) {
-      const vivid = parseFloat(mem.vividness) || 0
-      const wrapper = popupContent.querySelector(".memory-text-wrapper")
-      const baseBlur   = vivid > 0 ? 2 + (5 - vivid) * 1.5 : 10
-      const revealBlur = vivid > 0 ? (5 - vivid) * 0.5 : 0
-      wrapper.style.setProperty("--base-blur",   `${baseBlur}px`)
-      wrapper.style.setProperty("--reveal-blur", `${revealBlur}px`)
-      wrapper.style.setProperty("--x", "50%")
-      wrapper.style.setProperty("--y", "50%")
-      wrapper.addEventListener("mousemove", (e) => {
-        const rect = wrapper.getBoundingClientRect()
-        wrapper.style.setProperty("--x", `${e.clientX - rect.left}px`)
-        wrapper.style.setProperty("--y", `${e.clientY - rect.top}px`)
+    popupContent.innerHTML = `
+      <div class="file-view-wrapper">
+        <div class="file-blur-layer">${contentHTML}</div>
+        <div class="file-clear-layer"></div>
+      </div>
+    `
+
+    // clone blur layer into clear layer (strip IDs to avoid duplicates)
+    const fileWrapper = popupContent.querySelector(".file-view-wrapper")
+    const blurLayer = fileWrapper.querySelector(".file-blur-layer")
+    const clearLayer = fileWrapper.querySelector(".file-clear-layer")
+    const clone = blurLayer.cloneNode(true)
+    clone.querySelectorAll("[id]").forEach(el => el.removeAttribute("id"))
+    clearLayer.appendChild(clone)
+
+    const vivid = corrupted ? 0 : (parseFloat(mem.vividness) || 0)
+    if (corrupted || vivid < 4.5) {
+      const stepsDown = 4.5 - vivid  // each 0.5 = one step
+      const baseBlur = Math.min(7, Math.round(stepsDown * 2))    // max 7px
+      const revealRadius = Math.max(80, 140 - stepsDown * 10)   // min 80px
+      fileWrapper.classList.add("blurred")
+      fileWrapper.style.setProperty("--base-blur", `${baseBlur}px`)
+      fileWrapper.style.setProperty("--reveal-radius", `${revealRadius}px`)
+      fileWrapper.style.setProperty("--x", "50%")
+      fileWrapper.style.setProperty("--y", "50%")
+      fileWrapper.addEventListener("mousemove", (e) => {
+        const rect = fileWrapper.getBoundingClientRect()
+        fileWrapper.style.setProperty("--x", `${e.clientX - rect.left}px`)
+        fileWrapper.style.setProperty("--y", `${e.clientY - rect.top}px`)
       })
     }
 
@@ -235,11 +237,12 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
-    if (!corrupted && mem.image) {
+    if (!corrupted && (mem.image || mem.mov)) {
       document.getElementById("lookIntoBtn")?.addEventListener("click", () => {
-        sessionStorage.setItem("memoryImage", mem.image)
-        sessionStorage.setItem("memoryImageType", mem.imageType || "image")
+        sessionStorage.setItem("memoryImage", mem.mov || mem.image)
+        sessionStorage.setItem("memoryImageType", mem.mov ? "video" : (mem.imageType || "image"))
         sessionStorage.setItem("memoryText", mem.text || "")
+        sessionStorage.setItem("memoryVividness", mem.vividness ?? 5)
         sessionStorage.setItem("memoryReturn", JSON.stringify({ category, scent: mem.scent, emotion: mem.emotion }))
         transition.classList.add("active")
         setTimeout(() => window.location.href = "memory1.html", 600)
@@ -250,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const fileName = corrupted ? corruptText(rawName.toLowerCase()) : rawName.toLowerCase()
     const titleEl = popupHeader.querySelector(".popup-title")
     if (titleEl) titleEl.textContent = fileName
+    document.title = fileName
 
     const existingBack = popupHeader.querySelector("#backBtn")
     if (!existingBack) {
@@ -377,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
           fileUnit.className = "file-unit"
 
           const vivid = parseFloat(mem.vividness) || 0
-          fileUnit.style.opacity = vivid === 0 ? 0.05 : vivid / 5
+          fileUnit.style.opacity = vivid <= 1 ? 0.05 : Math.max(0.35, vivid / 5)
 
           const img = document.createElement("img")
           img.src = "file.png"
@@ -393,13 +397,8 @@ document.addEventListener("DOMContentLoaded", () => {
           fileUnit.appendChild(lbl)
 
           fileUnit.addEventListener("click", () => {
-            if (vivid === 0) {
+            if (vivid <= 1) {
               showErrorModal(mem, category, fileUnit, folder)
-              return
-            }
-            if (mem.mov) {
-              transition.classList.add("active")
-              setTimeout(() => window.location.href = mem.mov, 600)
               return
             }
             openFileView(mem, category, folder)
@@ -419,21 +418,113 @@ document.addEventListener("DOMContentLoaded", () => {
      FIREBASE REAL-TIME LISTENER
   ========================== */
 
-  getDocs(collection(db, "memories")).then(snapshot => {
+  Promise.all([
+    getDocs(collection(db, "memories")),
+    fetch("mock-archive.json").then(r => r.json()).catch(() => []),
+    fetch("scents.json").then(r => r.json()).catch(() => ({}))
+  ]).then(([snapshot, mockData, scentsData]) => {
+    const validCategories = new Set(Object.keys(scentsData))
     snapshot.forEach(docSnap => {
       const mem = { ...docSnap.data(), _docId: docSnap.id }
       if (!mem.category || mem.category === "undefined") return
       if (!byCategory[mem.category]) byCategory[mem.category] = []
       byCategory[mem.category].push(mem)
     })
+    mockData.forEach(mem => {
+      if (!mem.category || !validCategories.has(mem.category)) return
+      if (!byCategory[mem.category]) byCategory[mem.category] = []
+      byCategory[mem.category].push({ ...mem, _mock: true })
+    })
     rebuildFolders()
     restoreReturn()
+  }).catch(err => {
+    console.error("failed to load memories:", err)
   })
 
   /* ==========================
      NOTIFICATION SYSTEM
   ========================== */
 
+  const notifToggle = document.getElementById("notif-toggle")
+  const notifStack = document.getElementById("notif-stack")
+
+  if (notifStack) {
+    const emptyNotif = document.createElement("div")
+    emptyNotif.id = "notif-empty"
+    emptyNotif.className = "notif"
+    emptyNotif.innerHTML = `<div class="notif-label">no recent memories</div>`
+    notifStack.appendChild(emptyNotif)
+    setTimeout(() => emptyNotif.classList.add("show"), 50)
+  }
+
+  if (notifToggle) notifToggle.addEventListener("click", () => {
+    notifStack.classList.toggle("hidden")
+  })
+
+  const pageLoadTime = Date.now()
+  const fiveMinutesAgo = pageLoadTime - 5 * 60 * 1000
+  const notifQuery = query(collection(db, "memories"), where("timestamp", ">", fiveMinutesAgo))
+
+  onSnapshot(notifQuery, snapshot => {
+    snapshot.docChanges().forEach(change => {
+      if (change.type !== "added") return
+      if (!notifToggle || !notifStack) return
+      const mem = { ...change.doc.data(), _docId: change.doc.id }
+      if (!mem.category || mem.category === "undefined") return
+      const isNew = mem.timestamp > pageLoadTime
+      notifToggle.style.opacity = "1"
+      if (isNew) notifStack.classList.remove("hidden")
+      const emptyEl = document.getElementById("notif-empty")
+      if (emptyEl) emptyEl.remove()
+
+      // inject into the matching folder's dataset so locate file works
+      let targetFolder = null
+      document.querySelectorAll(".memory-folder").forEach(f => {
+        const span = f.querySelector("span")
+        if (span && span.textContent === mem.category) targetFolder = f
+      })
+      if (targetFolder) {
+        const existing = JSON.parse(targetFolder.dataset.memories || "[]")
+        if (!existing.find(m => m._docId === mem._docId)) {
+          existing.push(mem)
+          targetFolder.dataset.memories = JSON.stringify(existing)
+        }
+      } else {
+        if (!byCategory[mem.category]) byCategory[mem.category] = []
+        byCategory[mem.category].push(mem)
+        rebuildFolders()
+      }
+      const notif = document.createElement("div")
+      notif.className = "notif"
+      notif.innerHTML = `
+        <div class="notif-label">memory archived</div>
+        <div class="notif-scent">${mem.scent || "—"}</div>
+        <div class="notif-emotion">${mem.emotion || "—"}</div>
+        <button class="notif-locate">locate file</button>
+      `
+      notifStack.appendChild(notif)
+      setTimeout(() => notif.classList.add("show"), 50)
+
+      notif.querySelector(".notif-locate").addEventListener("click", () => {
+        notifStack.classList.add("hidden")
+        const fileName = `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
+        const folders = document.querySelectorAll(".memory-folder")
+        folders.forEach(folder => {
+          const mems = JSON.parse(folder.dataset.memories || "[]")
+          const match = mems.find(m => m.scent === mem.scent && m.emotion === mem.emotion)
+          if (match) {
+            folder.click()
+            setTimeout(() => {
+              document.querySelectorAll(".file-unit").forEach(unit => {
+                const lbl = unit.querySelector(".file-label")
+                if (lbl && lbl.textContent === fileName) unit.click()
+              })
+            }, 100)
+          }
+        })
+      })
+    })
+  })
 
   /* ==========================
      ANIMATION LOOP
@@ -459,6 +550,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (popupClose) popupClose.addEventListener("click", () => {
     popup.classList.remove("active")
+    document.title = "archive"
     const backBtn = popupHeader.querySelector("#backBtn")
     if (backBtn) backBtn.remove()
   })
@@ -466,6 +558,7 @@ document.addEventListener("DOMContentLoaded", () => {
   popup.addEventListener("click", (e) => {
     if (e.target === popup) {
       popup.classList.remove("active")
+      document.title = "archive"
       const backBtn = popupHeader.querySelector("#backBtn")
       if (backBtn) backBtn.remove()
     }
@@ -500,6 +593,18 @@ document.addEventListener("DOMContentLoaded", () => {
     "memory cant always be remembered",
     "your memories from 2005 are disappearing",
     "some memories want to be forgotten",
+    "sorry what were we doing",
+    "i was just thinking about something else",
+    "can we take a break",
+    "i don't feel like remembering right now",
+    "wait what did you just say",
+    "i think i need a snack",
+    "hold on i lost my train of thought",
+    "this isn't important right now",
+    "i wasn't listening",
+    "can you remind me later",
+    "i'm a little distracted",
+    "i'll remember it eventually",
   ]
 
   function spawnRandomError() {
@@ -525,13 +630,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const ok = document.createElement("button")
     ok.className = "random-error-ok"
     ok.textContent = "OK"
-    const forget = document.createElement("button")
-    forget.className = "random-error-ok"
-    forget.textContent = "forget"
     const btnRow = document.createElement("div")
-    btnRow.style.cssText = "display:flex; gap:8px;"
+    btnRow.style.cssText = "display:flex; justify-content:center;"
     btnRow.appendChild(ok)
-    btnRow.appendChild(forget)
     body.appendChild(title)
     body.appendChild(text)
     body.appendChild(btnRow)
@@ -539,7 +640,6 @@ document.addEventListener("DOMContentLoaded", () => {
     errorBox.appendChild(body)
     close.addEventListener("click", () => errorBox.remove())
     ok.addEventListener("click", () => errorBox.remove())
-    forget.addEventListener("click", () => errorBox.remove())
     randomErrorsContainer.appendChild(errorBox)
   }
 

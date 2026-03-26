@@ -18,6 +18,20 @@ const storage = getStorage(app)
 let scentData
 let selectedScent
 let selectedCategory
+
+let _touchStartX = 0
+let _touchStartY = 0
+document.addEventListener("touchstart", (e) => {
+  _touchStartX = e.touches[0].clientX
+  _touchStartY = e.touches[0].clientY
+}, { passive: true })
+document.addEventListener("touchmove", (e) => {
+  const emotionNode = document.getElementById("emotionNode")
+  if (!emotionNode || emotionNode.style.display === "none" || emotionNode.style.opacity === "0") return
+  const dx = Math.abs(e.touches[0].clientX - _touchStartX)
+  const dy = Math.abs(e.touches[0].clientY - _touchStartY)
+  if (dx > dy) e.preventDefault()
+}, { passive: false })
 let selectedEmotion
 let selectedVividness
 let selectedMemoryText = ""
@@ -100,12 +114,34 @@ function runCategoryScan() {
   }, 600)
 }
 
+const categoryDescriptions = {
+  "M0M'S PURS3":         "smells from someone who took care of you",
+  "FORG0TT3N OBJ3CTS":  "things that disappeared without you noticing",
+  "WARM M4CHINES":       "electronics, appliances, the hum of daily life",
+  "IN-BETWEEN SP4CES":   "hallways, waiting rooms, places you passed through",
+  "AFT3R THE RA1N":      "the smell of the world after water",
+  "CH1LDH00D PL4CES":    "rooms and corners from when you were small",
+  "S0FT TH1NGS":         "fabric, skin, the things you press your face into",
+  "PL4STIC + SYNTH3TIC": "new things, artificial things, manufactured smells",
+  "SUMM3R H34T":         "pavement, sunscreen, the smell of long afternoons",
+  "N1GHT T1ME":          "the dark, late hours, sleeping houses",
+  "0DD SMELL5":          "smells that don't make sense until they do",
+  "K1TCHEN M0MENTS":     "cooking, eating, someone making something for you",
+  "0UTS1DE THE H0USE":   "the yard, the street, just past the front door",
+  "CLO5E C0NTACT":       "the smell of people you were close to",
+  "DIG1TAL L1FE":        "screens, devices, the smell of modern life",
+}
+
 function finalizeCategory(category) {
   selectedCategory = category
-  categoryNode.innerHTML = `<span class="category-name">${category}</span>`
+  const desc = categoryDescriptions[category] || ""
+  categoryNode.innerHTML = `
+    <span class="category-name">${category}</span>
+    ${desc ? `<span class="category-desc">${desc}</span>` : ""}
+  `
 
   const categoryLabel = document.getElementById("categoryLabel")
-  categoryLabel.innerText = "category detected"
+  categoryLabel.innerText = "scent category detected"
   categoryLabel.style.color = "white"
 
   updateNav("category")
@@ -151,6 +187,8 @@ function continueCalibration() {
   const redoBtn = document.getElementById("redoBtn")
   if (redoBtn) redoBtn.remove()
   document.getElementById("categoryLabel").style.opacity = "0"
+  const desc = categoryNode.querySelector(".category-desc")
+  if (desc) desc.remove()
   categoryNode.classList.add("active")
   setTimeout(() => { showBranches() }, 500)
 }
@@ -381,6 +419,20 @@ function buildEmotionPicker() {
 
   picker.addEventListener("scroll", updateActive)
   updateActive()
+
+  picker.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0]
+      const dx = Math.abs(touch.clientX - (picker._touchStartX || touch.clientX))
+      const dy = Math.abs(touch.clientY - (picker._touchStartY || touch.clientY))
+      if (dx > dy) e.preventDefault()
+    }
+  }, { passive: false })
+
+  picker.addEventListener("touchstart", (e) => {
+    picker._touchStartX = e.touches[0].clientX
+    picker._touchStartY = e.touches[0].clientY
+  }, { passive: true })
 }
 
 /* ================= MEMORY INPUT ================= */
@@ -662,38 +714,7 @@ async function uploadMemory() {
     return
   }
 
-  const nav = document.getElementById("navBar")
-  nav.style.transition = "opacity .8s ease"
-  nav.style.opacity = "0"
-  emotionNode.style.opacity = "0"
-
-  const videoOverlay = document.createElement("div")
-  videoOverlay.style.cssText = `
-    position: fixed;
-    inset: 0;
-    background: black;
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity .6s ease;
-  `
-
-  const vid = document.createElement("video")
-  vid.src = "loading-screen.mp4"
-  vid.muted = true
-  vid.playsInline = true
-  vid.setAttribute("playsinline", "")
-  vid.setAttribute("webkit-playsinline", "")
-  vid.style.cssText = `width: 80%; height: 80%; object-fit: contain;`
-
-  videoOverlay.appendChild(vid)
-  document.body.appendChild(videoOverlay)
-  requestAnimationFrame(() => { videoOverlay.style.opacity = "1" })
-  vid.play().catch(() => {})
-
-  setTimeout(() => { window.location.href = "reload.html" }, 4000)
+  setTimeout(() => { window.location.href = "reload.html" }, 1200)
 }
 
 /* ================= FORGET ================= */

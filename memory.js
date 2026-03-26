@@ -9,12 +9,36 @@ document.addEventListener("DOMContentLoaded", () => {
   let blurAmount = 10;
   let focusRadius = 80;
 
+  // set tab title from the file we came from
+  const returnData = sessionStorage.getItem("memoryReturn")
+  if (returnData) {
+    try {
+      const { scent, emotion } = JSON.parse(returnData)
+      document.title = `${scent || "unknown"}_${emotion || "unknown"}.txt`
+    } catch(e) {}
+  }
+
   // build media element from sessionStorage
   const mediaData = sessionStorage.getItem("memoryImage");
   const mediaType = sessionStorage.getItem("memoryImageType");
+  const vividness = parseFloat(sessionStorage.getItem("memoryVividness") ?? 5);
+  const saturation = Math.round((vividness / 5) * 100);
+  const baseFilter = `saturate(${saturation}%)`;
+  const pixelSize = vividness >= 4.5 ? 0 : Math.round((4.5 - vividness) * 3);
+
   let mediaEl;
+  const isEmbed = mediaData && (mediaData.includes("archive.org/embed") || mediaData.includes("archive.org/download"));
   const isVideo = mediaType === "video" || (mediaData && mediaData.startsWith("data:video"));
-  if (mediaData && isVideo) {
+
+  if (mediaData && isEmbed) {
+    const identifier = mediaData.match(/archive\.org\/(?:embed|download)\/([^/?]+)/)?.[1] || ""
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://archive.org/embed/${identifier}?autoplay=1&start=0`;
+    iframe.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:none;";
+    iframe.allow = "autoplay";
+    memory.appendChild(iframe);
+    mediaEl = iframe;
+  } else if (mediaData && isVideo) {
     mediaEl = document.createElement("video");
     mediaEl.autoplay = true;
     mediaEl.muted = true;
@@ -25,7 +49,44 @@ document.addEventListener("DOMContentLoaded", () => {
     mediaEl = document.createElement("img");
     mediaEl.src = mediaData;
   }
-  if (mediaEl) memory.appendChild(mediaEl);
+
+  let displayEl = mediaEl;
+
+  if (mediaEl && pixelSize > 1) {
+    const pw = Math.max(20, Math.floor(window.innerWidth / pixelSize));
+    const ph = Math.max(20, Math.floor(window.innerHeight / pixelSize));
+    const canvas = document.createElement("canvas");
+    canvas.width = pw;
+    canvas.height = ph;
+    canvas.style.cssText = `position:absolute; top:0; left:0; width:100vw; height:100vh; image-rendering:pixelated; image-rendering:crisp-edges;`;
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+
+    function draw() { ctx.drawImage(mediaEl, 0, 0, pw, ph); }
+
+    if (isVideo) {
+      let looping = true;
+      mediaEl.addEventListener("play", function loop() {
+        if (!looping) return;
+        draw();
+        requestAnimationFrame(loop);
+      });
+      window.addEventListener("beforeunload", () => { looping = false; });
+    } else {
+      if (mediaEl.complete) draw();
+      else mediaEl.addEventListener("load", draw);
+    }
+
+    // keep mediaEl in DOM but invisible so canvas can read it
+    mediaEl.style.cssText = "position:absolute; opacity:0; pointer-events:none; width:1px; height:1px;";
+    memory.appendChild(mediaEl);
+    memory.appendChild(canvas);
+    displayEl = canvas;
+  } else if (mediaEl) {
+    memory.appendChild(mediaEl);
+  }
+
+  if (displayEl) displayEl.style.filter = baseFilter;
 
   /* ==========================
      FADE IN ON LOAD
@@ -44,16 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   memory.addEventListener("mousemove", (e) => {
-    if (!mediaEl) return;
+    if (!displayEl) return;
 
     const rect = memory.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    mediaEl.style.filter = `blur(${blurAmount}px)`;
+    displayEl.style.filter = `${baseFilter} blur(${blurAmount}px)`;
 
-    mediaEl.style.maskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
-    mediaEl.style.webkitMaskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
+    displayEl.style.maskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
+    displayEl.style.webkitMaskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
   });
 
   /* ==========================
@@ -63,9 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("mouseleave", () => {
     memory.classList.remove("active");
     if (!mediaEl) return;
-    mediaEl.style.filter = "none";
-    mediaEl.style.maskImage = "none";
-    mediaEl.style.webkitMaskImage = "none";
+    if (displayEl) {
+      displayEl.style.filter = baseFilter;
+      displayEl.style.maskImage = "none";
+      displayEl.style.webkitMaskImage = "none";
+    }
   });
 
   /* ==========================

@@ -34,7 +34,7 @@
     }
   ],
 
-  "FORGOT+EN OBJ3ECTS": [
+  "FORG0TT3N OBJ3CTS": [
     {
       "name": "inside a pencil case",
       "notes": {
@@ -49,14 +49,6 @@
         "top": ["dust", "stale air"],
         "heart": ["fabric lining", "cardboard"],
         "base": ["aged leather"]
-      }
-    },
-    {
-      "name": "camera bag fabric",
-      "notes": {
-        "top": ["synthetic nylon"],
-        "heart": ["dust", "rubber padding"],
-        "base": ["aged foam"]
       }
     },
     {
@@ -415,41 +407,6 @@
         "top": ["steam"],
         "heart": ["heated leftovers"],
         "base": ["plastic"]
-      }
-    }
-  ],
-
-  "P4P3R + PR1NT": [
-    {
-      "name": "old paperback book",
-      "notes": {
-        "top": ["dry paper"],
-        "heart": ["ink"],
-        "base": ["dust"]
-      }
-    },
-    {
-      "name": "fresh magazine pages",
-      "notes": {
-        "top": ["glossy ink"],
-        "heart": ["paper coating"],
-        "base": ["chemical print"]
-      }
-    },
-    {
-      "name": "receipt just printed",
-      "notes": {
-        "top": ["thermal paper"],
-        "heart": ["ink"],
-        "base": ["faint plastic"]
-      }
-    },
-    {
-      "name": "notebook left in a bag",
-      "notes": {
-        "top": ["paper"],
-        "heart": ["fabric"],
-        "base": ["graphite"]
       }
     }
   ],

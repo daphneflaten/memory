@@ -399,6 +399,7 @@ html, body {
   height: 28px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   padding: 0 10px;
   box-sizing: border-box;
 }
@@ -459,11 +460,12 @@ html, body {
 }
 /* ===== NOTIFICATIONS ===== */
 
+
 #notif-toggle {
   position: fixed;
   top: 16px;
   right: 16px;
-  z-index: 4;
+  z-index: 50000;
   color: white;
   font-family: "Reddit Mono", monospace;
   font-size: .65rem;
@@ -482,23 +484,20 @@ html, body {
   position: fixed;
   top: 40px;
   right: 16px;
-  z-index: 3;
+  z-index: 49999;
   display: flex;
   flex-direction: column;
   gap: 8px;
   align-items: flex-end;
-  pointer-events: none;
+  pointer-events: auto;
   max-height: 80vh;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: opacity .4s ease, transform .4s ease;
-  transform-origin: top right;
+  min-width: 220px;
 }
 
 #notif-stack.hidden {
-  opacity: 0;
-  transform: translateX(20px);
-  pointer-events: none;
+  display: none;
 }
 
 #notif-stack::-webkit-scrollbar {
@@ -508,6 +507,8 @@ html, body {
 .notif {
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 10px 14px;
   font-family: "Reddit Mono", monospace;
   font-size: .65rem;
@@ -568,35 +569,38 @@ html, body {
   background: white;
   color: black;
 }
-/* ===== MEMORY BLUR SYSTEM (WORKING VERSION) ===== */
+/* ===== MEMORY BLUR SYSTEM ===== */
 
-.memory-text-wrapper {
+.file-view-wrapper {
   position: relative;
   width: 100%;
   cursor: default;
 }
 
-.memory-text-blur {
-  filter: blur(var(--base-blur, 4px));
+.file-view-wrapper.blurred > .file-blur-layer {
+  filter: blur(var(--base-blur, 0px));
   user-select: none;
 }
 
-.memory-text-clear {
+.file-clear-layer {
+  display: none;
+}
+
+.file-view-wrapper.blurred .file-clear-layer {
+  display: block;
   position: absolute;
   inset: 0;
-  color: white;
-  filter: blur(var(--reveal-blur, 1px));
+  pointer-events: none;
   mask-image: radial-gradient(
-    circle 100px at var(--x, 50%) var(--y, 50%),
+    circle var(--reveal-radius, 120px) at var(--x, 50%) var(--y, 50%),
     white 0%,
-    white 40%,
-    transparent 70%
+    white 20%,
+    transparent 80%
   );
   -webkit-mask-image: radial-gradient(
-    circle 100px at var(--x, 50%) var(--y, 50%),
+    circle var(--reveal-radius, 120px) at var(--x, 50%) var(--y, 50%),
     white 0%,
-    white 40%,
-    transparent 70%
+    white 20%,
+    transparent 80%
   );
-  pointer-events: none;
 }

@@ -45,21 +45,22 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: .12;
+  opacity: .18;
   z-index: -2;
 }
 
 .screen-filter {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   pointer-events: none;
   z-index: 1000;
-  mix-blend-mode: screen;
-  opacity: .12;
-
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
 }
 
 /* ===== LAYOUT ===== */
@@ -98,14 +99,13 @@ body {
   font-size: var(--t2-size);
   font-weight: var(--t2-weight);
   color: #ffffff;
-  line-height: .9;
-    text-transform: uppercase;
-
+  line-height: 1.3;
+  text-transform: uppercase;
 }
 
 .category-box {
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
@@ -124,7 +124,7 @@ body {
 /* ===== SCENT BRANCH ===== */
 #scentsBranch {
   position: absolute;
-  top: 50%;
+  top: 57%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -275,7 +275,7 @@ button:hover {
   background: white;
   color: black;
   padding: 4px 10px;
-  
+  line-height: 2.5;
 }
 
 .emotion-label {
@@ -595,6 +595,32 @@ video::-webkit-media-controls-start-playback-button {
   user-select: none;
 }
 
+.vivid-bar-container.vivid-prompt {
+  animation: vivid-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes vivid-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.vivid-bar-ticks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.vivid-tick {
+  flex: 1;
+  border-right: 1px solid white;
+  mix-blend-mode: difference;
+}
+
+.vivid-tick:last-child {
+  border-right: none;
+}
+
 .vivid-bar-fill {
   height: 100%;
   background: white;
@@ -604,18 +630,13 @@ video::-webkit-media-controls-start-playback-button {
 }
 
 .vivid-bar-labels {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
+  width: 100%;
+  margin-top: 8px;
   font-size: var(--t-small);
-  pointer-events: none;
-  mix-blend-mode: difference;
-  color: rgba(255,255,255,0.5);
+  opacity: 0.5;
+  color: white;
 }
 
 .vivid-value-display {
@@ -633,4 +654,27 @@ video::-webkit-media-controls-start-playback-button {
 }
 .category-box.scent-selected .category-name {
   text-transform: lowercase;
+}
+
+.save-filename {
+  font-size: var(--ts-size);
+  opacity: 0.7;
+  letter-spacing: .04em;
+  word-break: break-word;
+  min-height: 1.5em;
+}
+
+.save-buttons {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  width: 100%;
+  margin-top: 0;
+  transition: max-height .6s ease, opacity .5s ease .2s, margin-top .6s ease;
+}
+
+.save-buttons.visible {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 40px;
 }

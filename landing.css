@@ -480,6 +480,16 @@ html, body {
   opacity: 1;
 }
 
+/* subtle border and hit-target for the notifications toggle */
+#notif-toggle {
+  padding: 6px 10px;
+  border: 1px solid white;
+  border-radius: 0;
+  background: none;
+  color: white;
+  transition: opacity 120ms ease, background-color 120ms ease, transform 120ms ease;
+}
+
 #notif-stack {
   position: fixed;
   top: 40px;

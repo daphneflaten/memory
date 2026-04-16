@@ -461,24 +461,6 @@ html, body {
 /* ===== NOTIFICATIONS ===== */
 
 
-#notif-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 50000;
-  color: white;
-  font-family: "Reddit Mono", monospace;
-  font-size: .65rem;
-  opacity: .5;
-  cursor: pointer;
-  user-select: none;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-#notif-toggle:hover {
-  opacity: 1;
-}
 
 #notif-stack {
   position: fixed;
@@ -584,6 +566,27 @@ html, body {
 
 .file-clear-layer {
   display: none;
+}
+
+#forgotten-link {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  color: white;
+  font-family: 'Reddit Mono', monospace;
+  font-size: .65rem;
+  text-decoration: none;
+  opacity: .4;
+  z-index: 60000;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid white;
+  transition: opacity .2s;
+}
+
+#forgotten-link:hover {
+  opacity: 1;
 }
 
 .file-view-wrapper.blurred .file-clear-layer {

@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJ4VKbXyNI4wGPRXRefP_7xqzJIQ89F6s",
@@ -13,7 +12,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
-const storage = getStorage(app)
 
 let scentData
 let selectedScent
@@ -35,8 +33,6 @@ document.addEventListener("touchmove", (e) => {
 let selectedEmotion
 let selectedVividness
 let selectedMemoryText = ""
-let selectedFile = null
-let selectedFileType = null
 
 document.querySelector('.bg-video').playbackRate = .4
 
@@ -150,7 +146,7 @@ function finalizeCategory(category) {
   redoBtn.innerText = "re-roll category"
   redoBtn.style.cssText = `
     position: fixed;
-    bottom: 100px;
+    bottom: 160px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
@@ -490,10 +486,22 @@ function showMemorySlide2() {
       <p class="memory-label">how vivid is this memory?</p>
       <div class="vivid-bar-container" id="vividBar">
         <div class="vivid-bar-fill" id="vividFill"></div>
-        <div class="vivid-bar-labels">
-          <span>fragmented</span>
-          <span>vivid</span>
+        <div class="vivid-bar-ticks">
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
+          <div class="vivid-tick"></div>
         </div>
+      </div>
+      <div class="vivid-bar-labels">
+        <span>fragmented</span>
+        <span>vivid</span>
       </div>
       <div class="vivid-value-display" id="vividDisplay">—</div>
     </div>
@@ -524,127 +532,20 @@ function showMemorySlide2() {
       continueBtn.onclick = () => {
         continueBtn.remove()
         emotionNode.style.opacity = "0"
-        setTimeout(() => showMemorySlide3(), 400)
+        setTimeout(() => saveMemory(), 400)
       }
     }
   }
 
-  vividBar.addEventListener("mousedown", (e) => { dragging = true; setVividness(e.clientX) })
+  vividBar.classList.add("vivid-prompt")
+  vividBar.addEventListener("mousedown", (e) => { vividBar.classList.remove("vivid-prompt"); dragging = true; setVividness(e.clientX) })
   document.addEventListener("mousemove", (e) => { if (dragging) setVividness(e.clientX) })
   document.addEventListener("mouseup", () => { dragging = false })
-  vividBar.addEventListener("touchstart", (e) => { dragging = true; setVividness(e.touches[0].clientX) }, { passive: true })
+  vividBar.addEventListener("touchstart", (e) => { vividBar.classList.remove("vivid-prompt"); dragging = true; setVividness(e.touches[0].clientX) }, { passive: true })
   document.addEventListener("touchmove", (e) => { if (dragging) setVividness(e.touches[0].clientX) }, { passive: true })
   document.addEventListener("touchend", () => { dragging = false })
 }
 
-function showMemorySlide3() {
-  emotionNode.innerHTML = `
-    <div class="memory-ui">
-      <p class="memory-label">attach an image or video?</p>
-      <div style="display:flex; flex-direction:row; gap:12px; width:100%;">
-        <button id="yesImageBtn" style="flex:1;">yes</button>
-        <button id="noImageBtn" style="flex:1;">no</button>
-      </div>
-      <input type="file" id="imageUpload" accept="image/*,video/*" style="display:none;">
-    </div>
-  `
-  emotionNode.style.display = "flex"
-  emotionNode.style.opacity = "1"
-
-  document.getElementById("yesImageBtn").addEventListener("click", () => {
-    document.getElementById("imageUpload").click()
-  })
-
-  document.getElementById("noImageBtn").addEventListener("click", () => {
-    selectedFile = null
-    selectedFileType = null
-    saveMemory()
-  })
-
-  document.getElementById("imageUpload").addEventListener("change", (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-
-    const isVideo = file.type.startsWith("video/")
-
-    if (isVideo && file.size > 25 * 1024 * 1024) {
-      showFileError("video too large — keep clips under 15 seconds")
-      e.target.value = ""
-      return
-    }
-
-    if (isVideo) {
-      selectedFile = file
-      selectedFileType = "video"
-      showFilePreview(file.name)
-    } else {
-      // compress image to a blob before uploading
-      const url = URL.createObjectURL(file)
-      const img = new Image()
-      img.onload = () => {
-        const maxDim = 1200
-        let w = img.width, h = img.height
-        if (w > maxDim || h > maxDim) {
-          if (w > h) { h = Math.round(h * maxDim / w); w = maxDim }
-          else { w = Math.round(w * maxDim / h); h = maxDim }
-        }
-        const canvas = document.createElement("canvas")
-        canvas.width = w
-        canvas.height = h
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h)
-        canvas.toBlob(blob => {
-          selectedFile = blob
-          selectedFileType = "image"
-          URL.revokeObjectURL(url)
-          showFilePreview(file.name)
-        }, "image/jpeg", 0.8)
-      }
-      img.src = url
-    }
-
-    function showFileError(msg) {
-      const existing = document.getElementById("filePreview")
-      if (existing) existing.remove()
-      const err = document.createElement("div")
-      err.id = "filePreview"
-      err.style.cssText = `margin-top:8px; font-size:.7rem; opacity:.6; text-align:left; width:100%;`
-      err.textContent = msg
-      document.querySelector("#emotionNode .memory-ui").appendChild(err)
-    }
-
-    function showFilePreview(name) {
-      const existing = document.getElementById("filePreview")
-      if (existing) existing.remove()
-
-      const preview = document.createElement("div")
-      preview.id = "filePreview"
-      preview.style.cssText = `display:flex; align-items:center; gap:10px; margin-top:8px; width:100%;`
-      preview.innerHTML = `
-        <span style="flex:1; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${name}</span>
-        <button id="removeFileBtn" style="width:auto; padding:4px 10px; flex-shrink:0;">✕</button>
-      `
-      document.querySelector("#emotionNode .memory-ui").appendChild(preview)
-
-      if (!document.getElementById("continueBtn")) {
-        const continueBtn = document.createElement("button")
-        continueBtn.id = "continueBtn"
-        continueBtn.innerHTML = `<img src="arrow.png" alt="continue">`
-        document.body.appendChild(continueBtn)
-        setTimeout(() => continueBtn.classList.add("show"), 100)
-        continueBtn.onclick = () => { continueBtn.remove(); saveMemory() }
-      }
-
-      document.getElementById("removeFileBtn").addEventListener("click", () => {
-        selectedFile = null
-        selectedFileType = null
-        document.getElementById("imageUpload").value = ""
-        preview.remove()
-        const continueBtn = document.getElementById("continueBtn")
-        if (continueBtn) continueBtn.remove()
-      })
-    }
-  })
-}
 
 /* ================= SAVE ================= */
 
@@ -656,10 +557,13 @@ function saveMemory() {
   categoryNode.style.opacity = "0"
   emotionNode.style.opacity = "0"
 
+  const fileName = `${selectedScent ? selectedScent.name : "unknown"}_${selectedEmotion || "unknown"}.txt`
+
   setTimeout(() => {
     emotionNode.innerHTML = `
-      <div class="memory-ui">
-        <div class="scent-grid">
+      <div class="memory-ui" style="align-items:center; text-align:center;">
+        <div id="fileNameDisplay" class="save-filename"></div>
+        <div id="saveButtons" class="save-buttons scent-grid">
           <button id="uploadBtn">upload to archive</button>
           <button id="forgetBtn">forget the memory</button>
         </div>
@@ -667,8 +571,24 @@ function saveMemory() {
     `
     emotionNode.style.display = "flex"
     emotionNode.style.opacity = "1"
+
     document.getElementById("uploadBtn").onclick = uploadMemory
     document.getElementById("forgetBtn").onclick = forgetMemory
+
+    const fileNameEl = document.getElementById("fileNameDisplay")
+    const saveButtons = document.getElementById("saveButtons")
+
+    let char = 0
+    function typeFileName() {
+      if (char <= fileName.length) {
+        fileNameEl.textContent = fileName.substring(0, char)
+        char++
+        setTimeout(typeFileName, 45)
+      } else {
+        setTimeout(() => saveButtons.classList.add("visible"), 400)
+      }
+    }
+    typeFileName()
   }, 400)
 }
 
@@ -676,45 +596,18 @@ function saveMemory() {
 
 async function uploadMemory() {
   const uploadBtn = document.getElementById("uploadBtn")
-
-  let imageUrl = null
+  if (uploadBtn) uploadBtn.textContent = "saving..."
 
   try {
-    if (selectedFile) {
-      const ext = selectedFileType === "video" ? (selectedFile.name?.split(".").pop() || "mp4") : "jpg"
-      const storageRef = ref(storage, `memories/${Date.now()}.${ext}`)
-      const contentType = selectedFileType === "video" ? (selectedFile.type || "video/mp4") : "image/jpeg"
-
-      if (uploadBtn) uploadBtn.textContent = "uploading... 0%"
-
-      imageUrl = await new Promise((resolve, reject) => {
-        const task = uploadBytesResumable(storageRef, selectedFile, { contentType })
-        task.on("state_changed",
-          snap => {
-            const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100)
-            if (uploadBtn) uploadBtn.textContent = `uploading... ${pct}%`
-          },
-          reject,
-          () => getDownloadURL(task.snapshot.ref).then(resolve)
-        )
-      })
-    }
-
-    if (uploadBtn) uploadBtn.textContent = "saving..."
-
     const memory = {
       category: selectedCategory,
       scent: selectedScent ? selectedScent.name : "unknown",
       emotion: selectedEmotion || "",
       vividness: selectedVividness || 0,
       text: selectedMemoryText,
-      image: imageUrl,
-      imageType: selectedFileType || null,
       timestamp: Date.now()
     }
-
     await addDoc(collection(db, "memories"), memory)
-
   } catch(e) {
     console.error("upload error:", e)
     if (uploadBtn) uploadBtn.textContent = "upload to archive"

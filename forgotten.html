@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>archive</title>
+  <title>forgotten archive</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200;300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="binary.css">
   <link rel="stylesheet" href="archive.css">
+  <link rel="stylesheet" href="forgotten.css">
 </head>
 
 <body>
@@ -16,28 +17,7 @@
 <div id="binary"></div>
 <div id="particles"></div>
 <div id="background-folders"></div>
-<div id="random-errors"></div>
 <div id="transition"></div>
-<div id="notif-stack" class="hidden"></div>
-
-<!-- error modal -->
-<div id="error-modal">
-  <div class="error-box">
-    <div class="error-header">
-      <span id="error-title">christmas_morning_3rd_grade.mov</span>
-      <div id="error-close">×</div>
-    </div>
-    <div class="error-body">
-      <img src="cats.gif" id="error-gif" alt="corrupted memory">
-      <h1>ERROR</h1>
-      <p>file corrupted cuz you cant remember</p>
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:30px;">
-        <button id="error-ok">OK</button>
-        <button id="error-open">open anyway</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- popup preview window -->
 <div id="popup">
@@ -49,10 +29,10 @@
   </div>
 </div>
 
-<a id="forgotten-link" href="forgotten.html">forgotten archive</a>
+<a id="archive-link" href="archive.html">← archive</a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="binary.js"></script>
-<script type="module" src="archive.js"></script>
+<script type="module" src="forgotten.js"></script>
 </body>
 </html>

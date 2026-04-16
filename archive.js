@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"
-import { getFirestore, collection, getDocs, deleteDoc, doc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJ4VKbXyNI4wGPRXRefP_7xqzJIQ89F6s",
@@ -56,6 +56,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const byCategory = {}
 
+  function assignFileNames(mems) {
+    const total = {}
+    mems.forEach(mem => {
+      const base = mem.mov
+        ? `${mem.scent}.mov`
+        : `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
+      total[base] = (total[base] || 0) + 1
+    })
+    const seen = {}
+    return mems.map(mem => {
+      const base = mem.mov
+        ? `${mem.scent}.mov`
+        : `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
+      if (total[base] === 1) return base
+      seen[base] = (seen[base] || 0) + 1
+      if (seen[base] === 1) return base
+      const dot = base.lastIndexOf('.')
+      return base.slice(0, dot) + ` (${seen[base]})` + base.slice(dot)
+    })
+  }
+
   function restoreReturn() {
     const raw = sessionStorage.getItem("memoryReturn")
     if (!raw) return
@@ -68,10 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (match) {
         folder.click()
         setTimeout(() => {
-          const fileName = `${scent || "unknown"}_${emotion || "unknown"}.txt`
           document.querySelectorAll(".file-unit").forEach(unit => {
-            const lbl = unit.querySelector(".file-label")
-            if (lbl && lbl.textContent === fileName) unit.click()
+            if (unit.dataset.scent === scent && unit.dataset.emotion === emotion) unit.click()
           })
         }, 100)
       }
@@ -292,7 +311,11 @@ document.addEventListener("DOMContentLoaded", () => {
       !(m.scent === mem.scent && m.emotion === mem.emotion && m.timestamp === mem.timestamp)
     )
     rebuildFolders()
-    if (mem._docId) deleteDoc(doc(db, "memories", mem._docId))
+    if (mem._docId) {
+      const { _docId, _mock, ...memData } = mem
+      addDoc(collection(db, "forgotten_memories"), { ...memData, forgottenAt: Date.now() }).catch(console.error)
+      deleteDoc(doc(db, "memories", mem._docId))
+    }
   }
 
   function pixelDissolve(element, onReady) {
@@ -390,11 +413,14 @@ document.addEventListener("DOMContentLoaded", () => {
         popup.classList.add("active")
 
         const mems = JSON.parse(folder.dataset.memories)
+        const fileNames = assignFileNames(mems)
 
-        mems.forEach(mem => {
+        mems.forEach((mem, idx) => {
 
           const fileUnit = document.createElement("div")
           fileUnit.className = "file-unit"
+          fileUnit.dataset.scent = mem.scent || ""
+          fileUnit.dataset.emotion = mem.emotion || ""
 
           const vivid = parseFloat(mem.vividness) || 0
           fileUnit.style.opacity = vivid <= 1 ? 0.05 : Math.max(0.35, vivid / 5)
@@ -405,9 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const lbl = document.createElement("span")
           lbl.className = "file-label"
-          lbl.textContent = mem.mov
-            ? `${mem.scent}.mov`
-            : `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
+          lbl.textContent = fileNames[idx]
 
           fileUnit.appendChild(img)
           fileUnit.appendChild(lbl)
@@ -461,21 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
      NOTIFICATION SYSTEM
   ========================== */
 
-  const notifToggle = document.getElementById("notif-toggle")
   const notifStack = document.getElementById("notif-stack")
-
-  if (notifStack) {
-    const emptyNotif = document.createElement("div")
-    emptyNotif.id = "notif-empty"
-    emptyNotif.className = "notif"
-    emptyNotif.innerHTML = `<div class="notif-label">no recent memories</div>`
-    notifStack.appendChild(emptyNotif)
-    setTimeout(() => emptyNotif.classList.add("show"), 50)
-  }
-
-  if (notifToggle) notifToggle.addEventListener("click", () => {
-    notifStack.classList.toggle("hidden")
-  })
 
   const pageLoadTime = Date.now()
   const fiveMinutesAgo = pageLoadTime - 5 * 60 * 1000
@@ -484,11 +494,10 @@ document.addEventListener("DOMContentLoaded", () => {
   onSnapshot(notifQuery, snapshot => {
     snapshot.docChanges().forEach(change => {
       if (change.type !== "added") return
-      if (!notifToggle || !notifStack) return
+      if (!notifStack) return
       const mem = { ...change.doc.data(), _docId: change.doc.id }
       if (!mem.category || mem.category === "undefined") return
       const isNew = mem.timestamp > pageLoadTime
-      notifToggle.style.opacity = "1"
       if (isNew) notifStack.classList.remove("hidden")
       const emptyEl = document.getElementById("notif-empty")
       if (emptyEl) emptyEl.remove()
@@ -523,7 +532,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       notif.querySelector(".notif-locate").addEventListener("click", () => {
         notifStack.classList.add("hidden")
-        const fileName = `${mem.scent || "unknown"}_${mem.emotion || "unknown"}.txt`
         const folders = document.querySelectorAll(".memory-folder")
         folders.forEach(folder => {
           const mems = JSON.parse(folder.dataset.memories || "[]")
@@ -532,8 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
             folder.click()
             setTimeout(() => {
               document.querySelectorAll(".file-unit").forEach(unit => {
-                const lbl = unit.querySelector(".file-label")
-                if (lbl && lbl.textContent === fileName) unit.click()
+                if (unit.dataset.scent === mem.scent && unit.dataset.emotion === mem.emotion) unit.click()
               })
             }, 100)
           }
@@ -665,8 +672,8 @@ document.addEventListener("DOMContentLoaded", () => {
     position: fixed;
     bottom: 24px;
     left: 24px;
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
     cursor: pointer;
     z-index: 60000;
@@ -676,6 +683,15 @@ document.addEventListener("DOMContentLoaded", () => {
   warningBtn.addEventListener("mouseenter", () => warningBtn.style.opacity = "1")
   warningBtn.addEventListener("mouseleave", () => warningBtn.style.opacity = ".7")
   document.body.appendChild(warningBtn)
+
+  const forgottenLink = document.getElementById("forgotten-link")
+  if (forgottenLink) {
+    forgottenLink.addEventListener("click", (e) => {
+      e.preventDefault()
+      transition.classList.add("active")
+      setTimeout(() => { window.location.href = "forgotten.html" }, 600)
+    })
+  }
 
   warningBtn.addEventListener("click", (e) => {
     e.stopPropagation()

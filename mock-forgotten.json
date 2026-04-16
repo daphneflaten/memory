@@ -1,0 +1,57 @@
+[
+  { "category": "M0M'S PURS3", "scent": "loose coins", "emotion": "loss", "vividness": 0.5, "timestamp": "2021-06-03T14:22:00", "text": "i used to count the coins in her change purse while she drove. i can't remember when i stopped doing that." },
+  { "category": "M0M'S PURS3", "scent": "old lipstick", "emotion": "grief", "vividness": 0.8, "timestamp": "2020-11-14T09:41:00", "text": "finding an old lipstick in a coat pocket that still smelled like her." },
+  { "category": "M0M'S PURS3", "scent": "crumpled receipt", "emotion": "loneliness", "vividness": 0.3, "timestamp": "2019-03-28T16:05:00", "text": "she kept every receipt. i found a stack of them years later and couldn't throw them away." },
+
+  { "category": "WARM M4CHINES", "scent": "back of a refrigerator", "emotion": "detachment", "vividness": 0.6, "timestamp": "2020-01-17T23:58:00", "text": "the hum was always there. i stopped noticing it until it stopped." },
+  { "category": "WARM M4CHINES", "scent": "electric blanket", "emotion": "shame", "vividness": 0.4, "timestamp": "2018-12-09T08:30:00", "text": "staying in bed too long, the blanket too warm, missing things i should have been at." },
+  { "category": "WARM M4CHINES", "scent": "old VCR", "emotion": "grief", "vividness": 0.7, "timestamp": "2017-12-25T19:14:00", "text": "the smell of the tape loading. we watched the same movie every christmas." },
+
+  { "category": "IN-BETWEEN SP4CES", "scent": "air rushing from a freezer", "emotion": "emptiness", "vividness": 0.5, "timestamp": "2021-08-22T13:47:00", "text": "opening a freezer in a store i can't remember anymore. just the cold air on my face." },
+  { "category": "IN-BETWEEN SP4CES", "scent": "hospital waiting room", "emotion": "anxiety", "vividness": 0.9, "timestamp": "2019-05-07T15:33:00", "text": "the smell of that waiting room stays with me even though i've tried to forget it." },
+  { "category": "IN-BETWEEN SP4CES", "scent": "stairwell of an old apartment", "emotion": "loneliness", "vividness": 0.3, "timestamp": "2016-09-11T21:19:00", "text": "we used to sit in the stairwell and talk. i can't remember what we talked about." },
+
+  { "category": "AFT3R THE RA1N", "scent": "moss on a damp rock", "emotion": "loss", "vividness": 0.6, "timestamp": "2020-04-30T10:08:00", "text": "there was a creek behind the house. it's a parking lot now." },
+  { "category": "AFT3R THE RA1N", "scent": "wet dog", "emotion": "childhood", "vividness": 0.8, "timestamp": "2015-02-14T17:52:00", "text": "the dog would come in from the rain and shake water everywhere. she's been gone a long time." },
+  { "category": "AFT3R THE RA1N", "scent": "flooded basement", "emotion": "anxiety", "vividness": 0.4, "timestamp": "2018-07-19T11:37:00", "text": "the summer it flooded. the smell never fully left." },
+
+  { "category": "0DD SMELL5", "scent": "balloon that just popped", "emotion": "grief", "vividness": 0.5, "timestamp": "2014-08-03T15:00:00", "text": "someone always cried when a balloon popped at parties. i can't remember whose birthday it was." },
+  { "category": "0DD SMELL5", "scent": "matches being struck", "emotion": "nostalgia", "vividness": 0.7, "timestamp": "2019-11-28T20:44:00", "text": "lighting candles at a table i can't picture anymore." },
+  { "category": "0DD SMELL5", "scent": "chlorine on a pool towel", "emotion": "loss", "vividness": 0.3, "timestamp": "2013-08-27T18:29:00", "text": "the last summer at that pool. we didn't know it was the last time." },
+
+  { "category": "CH1LDH00D PL4CES", "scent": "ball pit at a party place", "emotion": "nostalgia", "vividness": 0.6, "timestamp": "2009-04-12T14:00:00", "text": "i remember going but not who was there. just the smell and the noise." },
+  { "category": "CH1LDH00D PL4CES", "scent": "library during summer reading", "emotion": "comfort", "vividness": 0.4, "timestamp": "2010-07-08T10:15:00", "text": "the summer reading program. i don't remember winning or losing. just going." },
+  { "category": "CH1LDH00D PL4CES", "scent": "the corner store", "emotion": "loneliness", "vividness": 0.8, "timestamp": "2011-09-21T16:03:00", "text": "we went every day after school. i don't know what happened to that place." },
+
+  { "category": "S0FT TH1NGS", "scent": "inside a stuffed animal", "emotion": "grief", "vividness": 0.5, "timestamp": "2012-06-16T13:22:00", "text": "i gave it away and immediately regretted it. i can't remember where it went." },
+  { "category": "S0FT TH1NGS", "scent": "velvet on an old couch", "emotion": "nostalgia", "vividness": 0.7, "timestamp": "2016-01-04T19:48:00", "text": "my grandmother's couch. gone along with the house." },
+  { "category": "S0FT TH1NGS", "scent": "chenille robe", "emotion": "comfort", "vividness": 0.3, "timestamp": "2014-02-23T08:11:00", "text": "waking up sick and having it wrapped around me. i don't know what happened to it." },
+
+  { "category": "PL4STIC + SYNTH3TIC", "scent": "cheap earbuds wire", "emotion": "detachment", "vividness": 0.5, "timestamp": "2017-10-06T07:44:00", "text": "i used to listen to music on the bus. i can't remember what i was listening to." },
+  { "category": "PL4STIC + SYNTH3TIC", "scent": "rain poncho from a theme park", "emotion": "loss", "vividness": 0.4, "timestamp": "2015-06-30T14:57:00", "text": "there are photos from that trip but i can't remember actually being there." },
+  { "category": "PL4STIC + SYNTH3TIC", "scent": "rubber ducky from a dollar store", "emotion": "childhood", "vividness": 0.6, "timestamp": "2008-03-17T11:30:00", "text": "i can picture it but not the context. not the hands that gave it to me." },
+
+  { "category": "SUMM3R H34T", "scent": "melted ice cream on pavement", "emotion": "grief", "vividness": 0.7, "timestamp": "2013-07-14T16:20:00", "text": "running to catch the ice cream truck. i can't remember who i was running with." },
+  { "category": "SUMM3R H34T", "scent": "warm inflatable pool", "emotion": "nostalgia", "vividness": 0.4, "timestamp": "2010-08-05T13:09:00", "text": "it was in the backyard of a house i can't fully picture anymore." },
+  { "category": "SUMM3R H34T", "scent": "dried sweat on a jersey", "emotion": "loneliness", "vividness": 0.5, "timestamp": "2016-09-24T18:41:00", "text": "the last game of the season. i didn't know it was the last season." },
+
+  { "category": "N1GHT T1ME", "scent": "street after midnight", "emotion": "loneliness", "vividness": 0.6, "timestamp": "2019-03-02T00:47:00", "text": "walking home alone. the city felt empty in a way that used to feel okay." },
+  { "category": "N1GHT T1ME", "scent": "someone else's perfume in the dark", "emotion": "longing", "vividness": 0.8, "timestamp": "2020-08-15T02:13:00", "text": "i can't place who it was. just the feeling of someone nearby." },
+  { "category": "N1GHT T1ME", "scent": "cold window glass", "emotion": "detachment", "vividness": 0.3, "timestamp": "2015-11-07T23:55:00", "text": "pressing my face against the cold window of a moving car at night. i don't know where we were going." },
+
+  { "category": "K1TCHEN M0MENTS", "scent": "opening the freezer too long", "emotion": "emptiness", "vividness": 0.4, "timestamp": "2021-01-19T22:08:00", "text": "standing at the open freezer not looking for anything. just standing." },
+  { "category": "K1TCHEN M0MENTS", "scent": "burnt popcorn", "emotion": "embarrassment", "vividness": 0.7, "timestamp": "2018-10-13T20:31:00", "text": "i forgot about it. smoke alarm went off. everyone was home." },
+  { "category": "K1TCHEN M0MENTS", "scent": "coffee no one drank", "emotion": "grief", "vividness": 0.5, "timestamp": "2017-05-28T07:02:00", "text": "the coffee maker would start automatically. even after." },
+
+  { "category": "0UTS1DE THE H0USE", "scent": "trash bins on a hot day", "emotion": "shame", "vividness": 0.4, "timestamp": "2020-07-03T11:58:00", "text": "forgetting to bring them in. it felt like more than forgetting." },
+  { "category": "0UTS1DE THE H0USE", "scent": "neighbor's grill", "emotion": "nostalgia", "vividness": 0.6, "timestamp": "2014-06-21T19:17:00", "text": "there were parties at their house every summer. we stopped being invited and i never asked why." },
+  { "category": "0UTS1DE THE H0USE", "scent": "outdoor carpet on a front step", "emotion": "loss", "vividness": 0.3, "timestamp": "2013-09-09T15:44:00", "text": "i can picture the mat but not the door it was in front of." },
+
+  { "category": "CLO5E C0NTACT", "scent": "someone's scarf in winter", "emotion": "longing", "vividness": 0.7, "timestamp": "2021-12-11T18:36:00", "text": "they left it and i kept it too long before saying anything." },
+  { "category": "CLO5E C0NTACT", "scent": "cigarette smoke on a coat", "emotion": "grief", "vividness": 0.8, "timestamp": "2016-04-17T14:22:00", "text": "my grandfather smoked. i didn't know that smell was a gift." },
+  { "category": "CLO5E C0NTACT", "scent": "the back of a car seat", "emotion": "childhood", "vividness": 0.4, "timestamp": "2009-11-03T20:48:00", "text": "leaning against someone's shoulder in the back seat. i can't remember who." },
+
+  { "category": "DIG1TAL L1FE", "scent": "charging cable near outlet", "emotion": "detachment", "vividness": 0.5, "timestamp": "2022-02-27T23:19:00", "text": "the phone always charged by the same outlet. in the house i grew up in." },
+  { "category": "DIG1TAL L1FE", "scent": "old CD case plastic", "emotion": "nostalgia", "vividness": 0.6, "timestamp": "2012-04-08T16:53:00", "text": "a mix CD someone made for me. i don't know where it is." },
+  { "category": "DIG1TAL L1FE", "scent": "broken alarm clock", "emotion": "anxiety", "vividness": 0.8, "timestamp": "2018-09-14T06:07:00", "text": "missing something important. i still dream about this one." }
+]

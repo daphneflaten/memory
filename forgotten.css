@@ -1,0 +1,26 @@
+/* Invert the entire page */
+html {
+  filter: invert(1);
+}
+
+/* Back to archive link — mirrors #forgotten-link style from archive.css */
+#archive-link {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  color: white;
+  font-family: 'Reddit Mono', monospace;
+  font-size: .65rem;
+  text-decoration: none;
+  opacity: .4;
+  z-index: 60000;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid white;
+  transition: opacity .2s;
+}
+
+#archive-link:hover {
+  opacity: 1;
+}

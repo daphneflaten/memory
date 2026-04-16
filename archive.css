@@ -218,20 +218,6 @@ html, body {
   100% { transform: translate(-15px, 20px); }
 }
 
-#screen-overlay {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-
-  pointer-events: none;
-  z-index: 99999;
-
-  opacity: 0.12;
-  mix-blend-mode: screen;
-}
-
 #transition {
   position: fixed;
   inset: 0;

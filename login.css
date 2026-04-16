@@ -80,20 +80,6 @@ button:hover {
   }
 }
 
-#screen-overlay {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-
-  pointer-events: none;
-  z-index: 9999;
-
-  opacity: 0.12;
-  mix-blend-mode: screen;
-}
-
 .icon {
   animation: fadein 0.2s ease forwards;
   opacity: 0;

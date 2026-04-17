@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", () => {
           fileUnit.dataset.emotion = mem.emotion || ""
 
           const vivid = parseFloat(mem.vividness) || 0
-          fileUnit.style.opacity = vivid <= 1 ? 0.05 : Math.max(0.35, vivid / 5)
+          fileUnit.style.opacity = vivid <= 1 ? 0.15 : Math.max(0.35, vivid / 5)
 
           const img = document.createElement("img")
           img.src = "file.png"
@@ -459,7 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ========================== */
 
   Promise.all([
-    getDocs(collection(db, "memories")),
+    getDocs(collection(db, "memories")).catch(() => ({ forEach: () => {} })),
     fetch("mock-archive.json").then(r => r.json()).catch(() => []),
     fetch("scents.json").then(r => r.json()).catch(() => ({}))
   ]).then(([snapshot, mockData, scentsData]) => {
@@ -547,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       })
     })
-  })
+  }, () => {})
 
   /* ==========================
      ANIMATION LOOP

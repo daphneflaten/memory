@@ -419,7 +419,7 @@ textarea {
 
 .category-label {
   position: fixed;
-  top: calc(50% - 120px);
+  top: calc(50% - 260px);
   left: 50%;
   transform: translateX(-50%);
   font-size: var(--t-small);

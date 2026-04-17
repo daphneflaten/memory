@@ -435,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ========================== */
 
   Promise.all([
-    getDocs(collection(db, "memories")),
+    getDocs(collection(db, "memories")).catch(() => ({ forEach: () => {} })),
     fetch("mock-archive.json").then(r => r.json()).catch(() => []),
     fetch("scents.json").then(r => r.json()).catch(() => ({}))
   ]).then(([snapshot, mockData, scentsData]) => {
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
       })
     })
-  })
+  }, () => {})
 
   /* ==========================
      ANIMATION LOOP

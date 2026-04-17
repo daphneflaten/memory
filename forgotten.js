@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ========================== */
 
   Promise.all([
-    getDocs(collection(db, "forgotten_memories")),
+    getDocs(collection(db, "forgotten_memories")).catch(() => ({ forEach: () => {} })),
     fetch("mock-forgotten.json").then(r => r.json()).catch(() => [])
   ]).then(([snapshot, mockData]) => {
     snapshot.forEach(docSnap => {

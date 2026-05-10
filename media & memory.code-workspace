@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "media & memory",
+			"path": "."
+		},
+		{
+			"name": "horror game",
+			"path": "../horror game"
+		}
+	],
+	"settings": {}
+}

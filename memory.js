@@ -1,232 +1,238 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const memory = document.getElementById("memory");
-  const rememberBtn = document.getElementById("remember");
-  const returnBtn = document.getElementById("return");
-  const container = document.getElementById("particles");
-  const transition = document.getElementById("transition");
+  const memory = document.getElementById("memory")
+  const returnBtn = document.getElementById("return")
+  const container = document.getElementById("particles")
+  const transition = document.getElementById("transition")
 
-  let blurAmount = 10;
-  let focusRadius = 80;
+  /* ==========================
+     SET TAB TITLE
+  ========================== */
 
-  // set tab title from the file we came from
-  const returnData = sessionStorage.getItem("memoryReturn")
-  if (returnData) {
-    try {
-      const { scent, emotion } = JSON.parse(returnData)
-      document.title = `${scent || "unknown"}_${emotion || "unknown"}.txt`
-    } catch(e) {}
-  }
+  const title = sessionStorage.getItem("memoryTitle")
+  if (title) document.title = `${title}.mov`
 
-  // build media element from sessionStorage
-  const mediaData = sessionStorage.getItem("memoryImage");
-  const mediaType = sessionStorage.getItem("memoryImageType");
-  const vividness = parseFloat(sessionStorage.getItem("memoryVividness") ?? 5);
-  const saturation = Math.round((vividness / 5) * 100);
-  const baseFilter = `saturate(${saturation}%)`;
-  const pixelSize = vividness >= 4.5 ? 0 : Math.round((4.5 - vividness) * 3);
+  /* ==========================
+     BUILD VIDEO FROM SESSIONSTORAGE
+  ========================== */
 
-  let mediaEl;
-  const isEmbed = mediaData && (mediaData.includes("archive.org/embed") || mediaData.includes("archive.org/download"));
-  const isVideo = mediaType === "video" || (mediaData && mediaData.startsWith("data:video"));
+  const mediaSrc = sessionStorage.getItem("memoryImage")
 
-  if (mediaData && isEmbed) {
-    const identifier = mediaData.match(/archive\.org\/(?:embed|download)\/([^/?]+)/)?.[1] || ""
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://archive.org/embed/${identifier}?autoplay=1&start=0`;
-    iframe.style.cssText = "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(100vw, 177.78vh);height:min(100vh, 56.25vw);border:none;pointer-events:none;";
-    iframe.allow = "autoplay";
-    memory.appendChild(iframe);
-    mediaEl = iframe;
-  } else if (mediaData && isVideo) {
-    mediaEl = document.createElement("video");
-    mediaEl.autoplay = true;
-    mediaEl.muted = true;
-    mediaEl.loop = true;
-    mediaEl.playsInline = true;
-    mediaEl.src = mediaData;
-  } else if (mediaData) {
-    mediaEl = document.createElement("img");
-    mediaEl.src = mediaData;
-  }
+  if (mediaSrc) {
+    const isEmbed = mediaSrc.includes("archive.org/embed") || mediaSrc.includes("archive.org/download")
 
-  let displayEl = mediaEl;
-
-  if (mediaEl && pixelSize > 1 && !isVideo && !isEmbed) {
-    const pw = Math.max(20, Math.floor(window.innerWidth / pixelSize));
-    const ph = Math.max(20, Math.floor(window.innerHeight / pixelSize));
-    const canvas = document.createElement("canvas");
-    canvas.width = pw;
-    canvas.height = ph;
-    canvas.style.cssText = `position:absolute; top:0; left:0; width:100vw; height:100vh; image-rendering:pixelated; image-rendering:crisp-edges;`;
-    const ctx = canvas.getContext("2d");
-    ctx.imageSmoothingEnabled = false;
-
-    function draw() { ctx.drawImage(mediaEl, 0, 0, pw, ph); }
-
-    if (isVideo) {
-      let looping = true;
-      mediaEl.addEventListener("play", function loop() {
-        if (!looping) return;
-        draw();
-        requestAnimationFrame(loop);
-      });
-      window.addEventListener("beforeunload", () => { looping = false; });
+    if (isEmbed) {
+      const identifier = mediaSrc.match(/archive\.org\/(?:embed|download)\/([^/?]+)/)?.[1] || ""
+      const iframe = document.createElement("iframe")
+      iframe.src = `https://archive.org/embed/${identifier}?autoplay=1&start=0`
+      iframe.style.cssText = "position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(100vw, 177.78vh);height:min(100vh, 56.25vw);border:none;"
+      iframe.allow = "autoplay"
+      memory.appendChild(iframe)
+      const block = document.createElement("div")
+      block.className = "iframe-block"
+      memory.appendChild(block)
     } else {
-      if (mediaEl.complete) draw();
-      else mediaEl.addEventListener("load", draw);
+      const video = document.createElement("video")
+      video.autoplay = true
+      video.muted = true
+      video.loop = true
+      video.playsInline = true
+      video.controls = false
+      video.src = mediaSrc
+      memory.appendChild(video)
     }
-
-    // keep mediaEl in DOM but invisible so canvas can read it
-    mediaEl.style.cssText = "position:absolute; opacity:0; pointer-events:none; width:1px; height:1px;";
-    memory.appendChild(mediaEl);
-    memory.appendChild(canvas);
-    displayEl = canvas;
-  } else if (mediaEl) {
-    memory.appendChild(mediaEl);
   }
-
-  if (displayEl) displayEl.style.filter = baseFilter;
 
   /* ==========================
      FADE IN ON LOAD
   ========================== */
 
   window.addEventListener("load", () => {
-    transition.classList.add("fade-out");
-  });
+    transition.classList.add("fade-out")
+  })
 
   /* ==========================
-     MEMORY REVEAL BEHAVIOR
+     FLASHLIGHT PEEPHOLE
   ========================== */
 
-  memory.addEventListener("mouseenter", () => {
-    memory.classList.add("active");
-  });
+  const flashlight = document.getElementById("flashlight")
+  let peepholeRadius = 100
+  let mouseX = window.innerWidth / 2
+  let mouseY = window.innerHeight / 2
 
-  memory.addEventListener("mousemove", (e) => {
-    if (!displayEl) return;
+  function updateFlashlight() {
+    flashlight.style.background = `radial-gradient(circle ${peepholeRadius}px at ${mouseX}px ${mouseY}px, transparent 20%, rgba(0,0,0,0.97) 100%)`
+  }
 
-    const rect = memory.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    displayEl.style.filter = `${baseFilter} blur(${blurAmount}px)`;
-
-    displayEl.style.maskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
-    displayEl.style.webkitMaskImage = `radial-gradient(circle ${focusRadius}px at ${x}px ${y}px, black 0%, transparent 100%)`;
-  });
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX
+    mouseY = e.clientY
+    updateFlashlight()
+  })
 
   /* ==========================
-     RESET ONLY IF LEAVING WINDOW
+     REMEMBER HARDER BUTTON
   ========================== */
 
-  window.addEventListener("mouseleave", () => {
-    memory.classList.remove("active");
-    if (!mediaEl) return;
-    if (displayEl) {
-      displayEl.style.filter = baseFilter;
-      displayEl.style.maskImage = "none";
-      displayEl.style.webkitMaskImage = "none";
-    }
-  });
-
-  /* ==========================
-     REMEMBER HARDER
-  ========================== */
+  const rememberBtn = document.getElementById("remember")
 
   rememberBtn.addEventListener("click", () => {
-    blurAmount = Math.max(2, blurAmount - 1.5);
-    focusRadius += 15;
-  });
+    peepholeRadius = Math.min(peepholeRadius + 60, 700)
+    updateFlashlight()
+  })
+
+  let rx = Math.random() * (window.innerWidth - 180)
+  let ry = Math.random() * (window.innerHeight - 50)
+  rememberBtn.style.left = `${rx}px`
+  rememberBtn.style.top = `${ry}px`
+
+  let rvx = (Math.random() - 0.5) * 0.6
+  let rvy = (Math.random() - 0.5) * 0.6
+
+  function animateRememberBtn() {
+    rx += rvx
+    ry += rvy
+    if (rx <= 0 || rx >= window.innerWidth - 180) rvx *= -1
+    if (ry <= 0 || ry >= window.innerHeight - 50) rvy *= -1
+    rememberBtn.style.left = `${rx}px`
+    rememberBtn.style.top = `${ry}px`
+    requestAnimationFrame(animateRememberBtn)
+  }
+
+  animateRememberBtn()
 
   /* ==========================
-     RETURN TO LANDING (FADE OUT)
+     RETURN TO ARCHIVE
   ========================== */
 
   returnBtn.addEventListener("click", () => {
-
-    transition.classList.remove("fade-out");
-
-    setTimeout(() => {
-      window.location.href = "archive.html";
-    }, 600);
-  });
+    transition.classList.remove("fade-out")
+    setTimeout(() => { window.location.href = "archive.html" }, 600)
+  })
 
   /* ==========================
-     FLOATING BUTTONS
+     FLOATING RETURN BUTTON
   ========================== */
 
-  const floatingUI = [];
-  const elements = [rememberBtn, returnBtn];
+  let x = Math.random() * (window.innerWidth - 150)
+  let y = Math.random() * (window.innerHeight - 50)
+  returnBtn.style.left = `${x}px`
+  returnBtn.style.top = `${y}px`
 
-  elements.forEach(el => {
+  let vx = (Math.random() - 0.5) * 0.8
+  let vy = (Math.random() - 0.5) * 0.8
 
-    let x = Math.random() * (window.innerWidth - 150);
-    let y = Math.random() * (window.innerHeight - 50);
-
-    el.style.left = `${x}px`;
-    el.style.top = `${y}px`;
-
-    floatingUI.push({
-      element: el,
-      x,
-      y,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
-      width: 150,
-      height: 40
-    });
-  });
-
-  function animateUI() {
-
-    floatingUI.forEach(obj => {
-
-      obj.x += obj.vx;
-      obj.y += obj.vy;
-
-      if (obj.x <= 0 || obj.x >= window.innerWidth - obj.width) {
-        obj.vx *= -1;
-      }
-
-      if (obj.y <= 0 || obj.y >= window.innerHeight - obj.height) {
-        obj.vy *= -1;
-      }
-
-      obj.element.style.left = `${obj.x}px`;
-      obj.element.style.top = `${obj.y}px`;
-    });
-
-    requestAnimationFrame(animateUI);
+  function animateBtn() {
+    x += vx
+    y += vy
+    if (x <= 0 || x >= window.innerWidth - 150) vx *= -1
+    if (y <= 0 || y >= window.innerHeight - 50) vy *= -1
+    returnBtn.style.left = `${x}px`
+    returnBtn.style.top = `${y}px`
+    requestAnimationFrame(animateBtn)
   }
 
-  animateUI();
+  animateBtn()
 
   /* ==========================
-     THROTTLED CURSOR PARTICLES
+     LINKED MEMORIES (MEMEX TRAILS)
   ========================== */
 
-  let lastParticle = 0;
+  fetch("data.json")
+    .then(r => r.json())
+    .then(data => {
+      const currentId = sessionStorage.getItem("memoryTitle")
+      const current = data.find(m => m.id === currentId)
+      if (!current || !current.linked || current.linked.length === 0) return
+
+      current.linked.forEach(linkedId => {
+        const linked = data.find(m => m.id === linkedId)
+        if (!linked) return
+
+        const el = document.createElement("div")
+        el.className = "linked-memory"
+
+        const icon = document.createElement("img")
+        icon.src = "file.png"
+
+        const label = document.createElement("span")
+        label.textContent = linked.title.replace(/_/g, " ")
+
+        el.appendChild(icon)
+        el.appendChild(label)
+        document.body.appendChild(el)
+
+        let lx = Math.random() * (window.innerWidth - 80)
+        let ly = Math.random() * (window.innerHeight - 80)
+        let lvx = (Math.random() - 0.5) * 0.3
+        let lvy = (Math.random() - 0.5) * 0.3
+
+        el.style.left = `${lx}px`
+        el.style.top = `${ly}px`
+
+        function animateLinked() {
+          const dx = mouseX - lx
+          const dy = mouseY - ly
+          const dist = Math.sqrt(dx * dx + dy * dy)
+
+          if (dist > 120) {
+            lvx += (dx / dist) * 0.015
+            lvy += (dy / dist) * 0.015
+          }
+
+          const speed = Math.sqrt(lvx * lvx + lvy * lvy)
+          if (speed > 1.2) {
+            lvx = (lvx / speed) * 1.2
+            lvy = (lvy / speed) * 1.2
+          }
+
+          lx += lvx
+          ly += lvy
+
+          if (lx <= 0 || lx >= window.innerWidth - 80) lvx *= -1
+          if (ly <= 0 || ly >= window.innerHeight - 60) lvy *= -1
+          lx = Math.max(0, Math.min(lx, window.innerWidth - 80))
+          ly = Math.max(0, Math.min(ly, window.innerHeight - 60))
+
+          el.style.left = `${lx}px`
+          el.style.top = `${ly}px`
+
+          requestAnimationFrame(animateLinked)
+        }
+
+        animateLinked()
+
+        el.addEventListener("click", () => {
+          sessionStorage.setItem("memoryImage", linked.src || "")
+          sessionStorage.setItem("memoryImageType", "video")
+          sessionStorage.setItem("memoryTitle", linked.id)
+          sessionStorage.setItem("memoryDate", linked.date || "")
+          transition.classList.remove("fade-out")
+          setTimeout(() => window.location.href = "memory.html", 600)
+        })
+      })
+    })
+    .catch(err => console.error("failed to load linked memories:", err))
+
+  /* ==========================
+     CURSOR PARTICLES
+  ========================== */
+
+  let lastParticle = 0
 
   document.addEventListener("mousemove", (e) => {
+    const now = Date.now()
+    if (now - lastParticle < 30) return
+    lastParticle = now
+    const p = document.createElement("div")
+    p.className = "particle"
+    p.style.left = e.clientX + "px"
+    p.style.top = e.clientY + "px"
+    const size = Math.random() * 4 + 2
+    p.style.width = size + "px"
+    p.style.height = size + "px"
+    container.appendChild(p)
+    setTimeout(() => p.remove(), 800)
+  })
 
-    const now = Date.now();
-    if (now - lastParticle < 30) return;
-    lastParticle = now;
-
-    const p = document.createElement("div");
-    p.className = "particle";
-
-    p.style.left = e.clientX + "px";
-    p.style.top = e.clientY + "px";
-
-    const size = Math.random() * 4 + 2;
-    p.style.width = size + "px";
-    p.style.height = size + "px";
-
-    container.appendChild(p);
-    setTimeout(() => p.remove(), 800);
-  });
-
-});
+})
